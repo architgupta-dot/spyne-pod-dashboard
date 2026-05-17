@@ -1890,44 +1890,34 @@ function applyUserFilter() {
   if(!currentUser) return;
   
   if(currentUser.role !== 'lead') {
-    // Lock to own data
+    // Non-lead: lock to own data only
     activeFilter = currentUser.id;
     
-    // Hide filter pills container
-    const pillsContainer = document.getElementById('topbar-filter-pills');
-    if(pillsContainer) pillsContainer.style.display = 'none';
-    
-    // Also hide any div containing pills
-    document.querySelectorAll('.filter-pills-row').forEach(el => el.style.display = 'none');
-    
-    // Deactivate all pills and activate only theirs
-    document.querySelectorAll('.pill').forEach(p => {
-      p.classList.remove('active');
-      if(p.dataset.id === currentUser.id) p.classList.add('active');
-    });
+    // Inject CSS to permanently hide all filter pills and per-tab filters
+    const style = document.createElement('style');
+    style.id = 'user-lock-style';
+    style.textContent = `
+      #filter-pills { display: none !important; }
+      .filter-pills { display: none !important; }
+      .tab-filter-bar { display: none !important; }
+      [id^="tf-"] { display: none !important; }
+      #my-data-label { display: flex !important; }
+    `;
+    document.head.appendChild(style);
     
     // Show "my data" label
     const myLabel = document.getElementById('my-data-label');
     if(myLabel) myLabel.style.display = 'flex';
     
-    // Block ALL filter changes for non-leads
-    window._originalSetFilter = window.setFilter;
-    window.setFilter = function() { return false; };
-    window.setTabFilter = function() { return false; };
-    
-    // Hide per-tab filter bars after render
-    setTimeout(() => {
-      document.querySelectorAll('.tab-filter-bar, [id^="tf-"], .tf-pill-row, .tab-filter-row').forEach(el => {
-        el.style.display = 'none';
-      });
-      // Also hide the buildTabFilterBar output
-      document.querySelectorAll('[id$="-filter-bar"]').forEach(el => el.style.display = 'none');
-    }, 50);
+    // Block filter changes permanently
+    window.setFilter = function(el, id) { return false; };
+    window.setTabFilter = function(el, id) { return false; };
+    window.setDemoStageFilter = function(f, el) { return false; };
+    window.setLeadsFilter = function(f, el) { return false; };
     
   } else {
-    // Archit - full access
+    // Archit - full access, show everything
     activeFilter = 'all';
-    document.querySelectorAll('.pill[data-id="all"]').forEach(p => p.classList.add('active'));
   }
 }
 
