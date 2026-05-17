@@ -325,7 +325,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
       <div class="divider"></div>
     </div>
     <div class="filter-pills" id="filter-pills">
-      <div class="pill active" data-id="all" onclick="setFilter(this,'all')">All team</div>
+      <div class="filter-pills-row" class="pill active" data-id="all" onclick="setFilter(this,'all')">All team</div>
       <div class="pill ae-pill" data-id="67333606" onclick="setFilter(this,'67333606')">Archit</div>
       <div class="pill ae-pill" data-id="160768701" onclick="setFilter(this,'160768701')">Jace Larsen</div>
       <div class="pill ae-pill" data-id="160575588" onclick="setFilter(this,'160575588')">Liam Fallon</div>
@@ -1902,19 +1902,46 @@ function initDashboard() {
   // Set user badge in topbar
   const badge = document.getElementById('user-badge');
   if(badge && currentUser) {
-    badge.innerHTML = '&#128100; ' + currentUser.name + ' <span style="font-size:10px;opacity:0.6">▼</span>';
-    badge.onclick = () => { if(confirm('Sign out?')) logout(); };
+    badge.innerHTML = '&#128100; ' + currentUser.name + ' <span style="font-size:10px;opacity:0.6">&#9660;</span>';
+    badge.onclick = () => { if(confirm('Sign out as ' + currentUser.name + '?')) logout(); };
   }
 
-  // If not lead, auto-lock filter to their own ID and hide filter pills
   if(currentUser && currentUser.role !== 'lead') {
+    // Lock filter to their own ID — non-leads see only their data
     activeFilter = currentUser.id;
-    // Hide all team filter pills area
-    const pillsArea = document.querySelector('.filter-pills-row');
-    if(pillsArea) pillsArea.style.display = 'none';
-    // Show "My Data Only" label
+
+    // Hide the entire filter pills row
+    document.querySelectorAll('.filter-pills-row, .pills-container, [class*="filter-pill"]').forEach(el => {
+      el.style.display = 'none';
+    });
+
+    // Hide ALL pill divs in topbar area
+    const allPills = document.querySelectorAll('.pill, .ae-pill');
+    allPills.forEach(p => p.style.display = 'none');
+
+    // Show "My Data Only" badge
     const myLabel = document.getElementById('my-data-label');
     if(myLabel) myLabel.style.display = 'flex';
+
+    // Override setFilter to prevent anyone changing the filter
+    window.setFilter = function(el, id) { return false; };
+
+    // Hide topbar filter pills
+    const topbarFP = document.getElementById('topbar-filter-pills');
+    if(topbarFP) topbarFP.style.display = 'none';
+    // Also hide by class
+    document.querySelectorAll('.filter-pills-row').forEach(el => el.style.display='none');
+
+    // Find and hide the filter section specifically
+    document.querySelectorAll('div[style*="filter"]').forEach(el => {
+      if(el.querySelector && el.querySelector('.pill')) el.style.display = 'none';
+    });
+
+  } else {
+    // Lead (Archit) - show all data, show all pills
+    activeFilter = 'all';
+    const myLabel = document.getElementById('my-data-label');
+    if(myLabel) myLabel.style.display = 'none';
   }
 
   renderSummary();
