@@ -1371,6 +1371,13 @@ function setFilter(el,id){
   el.classList.add('active');activeFilter=id;renderCurrentTab();
 }
 function renderCurrentTab(){
+  // After render, re-apply user filter restrictions
+  if(currentUser && currentUser.role !== 'lead') {
+    setTimeout(() => {
+      document.querySelectorAll('.tab-filter-bar, [id^="tf-"]').forEach(el => el.style.display='none');
+    }, 10);
+  }
+
   const r={summary:renderSummary,pipeline:renderPipeline,leads:renderLeads,stale:renderStale,inbound:renderInboundLeads,factors:renderFactors,forecast:renderForecast,demostage:renderDemoStage,indiscussion:renderInDiscussion,futureprospect:renderFutureProspect,closed:renderClosed,engagements:renderEngagements};
   if(r[currentTab])r[currentTab]();
 }
@@ -1862,7 +1869,6 @@ function doLogin() {
   const u = document.getElementById('login-username').value.trim().toLowerCase();
   const p = document.getElementById('login-password').value;
   const err = document.getElementById('login-error');
-
   if(USERS[u] && p === PASSWORD) {
     currentUser = {...USERS[u], username: u};
     localStorage.setItem('spyne_pod_user', JSON.stringify(currentUser));
@@ -1874,127 +1880,91 @@ function doLogin() {
   }
 }
 
-// Allow Enter key on password field
-document.addEventListener('DOMContentLoaded', () => {
-  const pwdField = document.getElementById('login-password');
-  if(pwdField) pwdField.addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
-  const userField = document.getElementById('login-username');
-  if(userField) userField.addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('login-password').focus(); });
-
-  // Auto-login if session exists
-  const saved = localStorage.getItem('spyne_pod_user');
-  if(saved) {
-    try {
-      currentUser = JSON.parse(saved);
-      document.getElementById('login-screen').style.display = 'none';
-      initDashboard();
-    } catch(e) { localStorage.removeItem('spyne_pod_user'); }
-  }
-});
-
 function logout() {
   localStorage.removeItem('spyne_pod_user');
   currentUser = null;
   location.reload();
 }
 
+function applyUserFilter() {
+  if(!currentUser) return;
+  
+  if(currentUser.role !== 'lead') {
+    // Lock to own data
+    activeFilter = currentUser.id;
+    
+    // Hide filter pills container
+    const pillsContainer = document.getElementById('topbar-filter-pills');
+    if(pillsContainer) pillsContainer.style.display = 'none';
+    
+    // Also hide any div containing pills
+    document.querySelectorAll('.filter-pills-row').forEach(el => el.style.display = 'none');
+    
+    // Deactivate all pills and activate only theirs
+    document.querySelectorAll('.pill').forEach(p => {
+      p.classList.remove('active');
+      if(p.dataset.id === currentUser.id) p.classList.add('active');
+    });
+    
+    // Show "my data" label
+    const myLabel = document.getElementById('my-data-label');
+    if(myLabel) myLabel.style.display = 'flex';
+    
+    // Block ALL filter changes for non-leads
+    window._originalSetFilter = window.setFilter;
+    window.setFilter = function() { return false; };
+    window.setTabFilter = function() { return false; };
+    
+    // Hide per-tab filter bars after render
+    setTimeout(() => {
+      document.querySelectorAll('.tab-filter-bar, [id^="tf-"], .tf-pill-row, .tab-filter-row').forEach(el => {
+        el.style.display = 'none';
+      });
+      // Also hide the buildTabFilterBar output
+      document.querySelectorAll('[id$="-filter-bar"]').forEach(el => el.style.display = 'none');
+    }, 50);
+    
+  } else {
+    // Archit - full access
+    activeFilter = 'all';
+    document.querySelectorAll('.pill[data-id="all"]').forEach(p => p.classList.add('active'));
+  }
+}
+
 function initDashboard() {
-  // Set user badge in topbar
+  // Set badge
   const badge = document.getElementById('user-badge');
   if(badge && currentUser) {
     badge.innerHTML = '&#128100; ' + currentUser.name + ' <span style="font-size:10px;opacity:0.6">&#9660;</span>';
     badge.onclick = () => { if(confirm('Sign out as ' + currentUser.name + '?')) logout(); };
   }
-
-  if(currentUser && currentUser.role !== 'lead') {
-    // Lock filter to their own ID — non-leads see only their data
-    activeFilter = currentUser.id;
-
-    // Hide the entire filter pills row
-    document.querySelectorAll('.filter-pills-row, .pills-container, [class*="filter-pill"]').forEach(el => {
-      el.style.display = 'none';
-    });
-
-    // Hide ALL pill divs in topbar area
-    const allPills = document.querySelectorAll('.pill, .ae-pill');
-    allPills.forEach(p => p.style.display = 'none');
-
-    // Show "My Data Only" badge
-    const myLabel = document.getElementById('my-data-label');
-    if(myLabel) myLabel.style.display = 'flex';
-
-    // Override setFilter to prevent anyone changing the filter
-    window.setFilter = function(el, id) { return false; };
-
-    // Hide topbar filter pills
-    const topbarFP = document.getElementById('topbar-filter-pills');
-    if(topbarFP) topbarFP.style.display = 'none';
-    // Also hide by class
-    document.querySelectorAll('.filter-pills-row').forEach(el => el.style.display='none');
-
-    // Find and hide the filter section specifically
-    document.querySelectorAll('div[style*="filter"]').forEach(el => {
-      if(el.querySelector && el.querySelector('.pill')) el.style.display = 'none';
-    });
-
-  } else {
-    // Lead (Archit) - show all data, show all pills
-    activeFilter = 'all';
-    const myLabel = document.getElementById('my-data-label');
-    if(myLabel) myLabel.style.display = 'none';
-  }
-
+  
+  // Apply filter restrictions BEFORE rendering
+  applyUserFilter();
+  
+  // Now render
   renderSummary();
 }
 
-// Auto-render handled by initDashboard() after login
-</script>
+// ── Startup ───────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  // Keyboard nav
+  const pwdField = document.getElementById('login-password');
+  if(pwdField) pwdField.addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+  const userField = document.getElementById('login-username');
+  if(userField) userField.addEventListener('keydown', e => { if(e.key==='Enter') pwdField && pwdField.focus(); });
 
-<button class="hs-search-fab" onclick="openHsSearch()" title="Search HubSpot (Cmd+K)">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
-</button>
-
-<div class="hs-modal-overlay" id="hs-modal-overlay" onclick="if(event.target===this)closeHsModal()">
-  <div class="hs-modal">
-    <div class="hs-modal-header">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/></svg>
-      <input class="hs-modal-input" id="hs-search-input" type="text" placeholder="Search dealerships, contacts, deals..." autocomplete="off">
-      <button class="hs-modal-close" onclick="closeHsModal()">&#10005;</button>
-    </div>
-    <div class="hs-modal-tabs">
-      <div class="hs-modal-tab active" onclick="setHsTab(this,'all')">All</div>
-      <div class="hs-modal-tab" onclick="setHsTab(this,'deals')">Deals</div>
-      <div class="hs-modal-tab" onclick="setHsTab(this,'contacts')">Contacts</div>
-    </div>
-    <div class="hs-modal-body" id="hs-modal-body"><div class="hs-modal-hint">Search deals, contacts across your HubSpot</div></div>
-  </div>
-</div>
-
-<script>
-let hsSearchTab='all',hsTimer=null;
-function openHsSearch(){document.getElementById('hs-modal-overlay').classList.add('open');setTimeout(()=>{const el=document.getElementById('hs-search-input');el.focus();el.value='';document.getElementById('hs-modal-body').innerHTML='<div class="hs-modal-hint">Search deals and contacts</div>';},50);}
-function closeHsModal(){document.getElementById('hs-modal-overlay').classList.remove('open');}
-function setHsTab(el,t){hsSearchTab=t;document.querySelectorAll('.hs-modal-tab').forEach(x=>x.classList.remove('active'));el.classList.add('active');const q=document.getElementById('hs-search-input').value.trim();if(q.length>=2)runLocalSearch(q);}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeHsModal();if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openHsSearch();}});
-function runLocalSearch(q){
-  const lq=q.toLowerCase();let results=[];
-  if(hsSearchTab==='all'||hsSearchTab==='deals'){
-    DEALS.forEach(d=>{if(d.n.toLowerCase().includes(lq))results.push({type:'deals',id:d.id,name:d.n,subtitle:(OWNERS[d.o]||d.o)+' · '+(STAGE_NAMES[d.s]||d.s)+(d.a?' · '+fmtAmt(d.a):''),url:d.url});});
-    CLOSED_DEALS.forEach(d=>{if(d.n.toLowerCase().includes(lq))results.push({type:'deals',id:d.id,name:d.n+' (Closed)',subtitle:(OWNERS[d.o]||d.o)+(d.c?' · Closed '+d.c:''),url:d.url});});
+  // Check for saved session
+  const saved = localStorage.getItem('spyne_pod_user');
+  if(saved) {
+    try {
+      currentUser = JSON.parse(saved);
+      document.getElementById('login-screen').style.display = 'none';
+      initDashboard();
+    } catch(e) {
+      localStorage.removeItem('spyne_pod_user');
+    }
   }
-  if(hsSearchTab==='all'||hsSearchTab==='contacts'){
-    CONTACTS.forEach(c=>{if(c.n.toLowerCase().includes(lq)||(c.co&&c.co.toLowerCase().includes(lq)))results.push({type:'contacts',id:c.id,name:c.n,subtitle:(c.co||'—')+' · '+(OWNERS[c.o]||c.o),url:'https://app.hubspot.com/contacts/242626590/record/0-1/'+c.id});});
-  }
-  const body=document.getElementById('hs-modal-body');
-  if(!results.length){body.innerHTML=`<div class="hs-modal-empty">No results for "<strong>${q}</strong>"<br><a href="https://app.hubspot.com/contacts/242626590/deals/list/view/all/?query=${encodeURIComponent(q)}" target="_blank" style="color:var(--blue);font-size:11px;font-weight:500">Search in HubSpot directly &#8599;</a></div>`;return;}
-  const typeClass={deals:'hs-type-deal',contacts:'hs-type-contact'};
-  body.innerHTML=results.slice(0,20).map(r=>`<div class="hs-result-item" onclick="window.open('${r.url}','_blank')"><div class="hs-result-left"><div class="hs-result-name">${r.name}</div><div class="hs-result-sub">${r.subtitle}</div></div><span class="hs-result-type ${typeClass[r.type]||''}">${r.type}</span><a href="${r.url}" target="_blank" class="hs-result-open" onclick="event.stopPropagation()">Open &#8599;</a></div>`).join('');
-}
-document.getElementById('hs-search-input').addEventListener('input',e=>{
-  const q=e.target.value.trim();clearTimeout(hsTimer);
-  if(q.length<2){document.getElementById('hs-modal-body').innerHTML='<div class="hs-modal-hint">Search deals and contacts</div>';return;}
-  hsTimer=setTimeout(()=>runLocalSearch(q),200);
 });
+
 </script>
-</body>
-</html>
