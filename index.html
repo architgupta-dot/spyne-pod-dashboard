@@ -270,7 +270,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
 <div class="sidebar">
   <div class="sidebar-logo">
     <div class="brand">Spyne POD</div>
-    <div class="sub">Refreshed May 17 &middot; Live</div>
+    <div class="sub">Refreshed May 18 &middot; Live</div>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label">Analytics</div>
@@ -1336,7 +1336,7 @@ function tabFiltered(arr,tab,key='o'){
 
 let activeFilter='all';
 let currentTab='summary';
-const TODAY=new Date("2026-05-17");
+const TODAY=new Date("2026-05-18");
 const daysSince=d=>d?Math.floor((TODAY-new Date(d))/864e5):999;
 const fmtAmt=a=>!a?'—':a>=1e6?'$'+(a/1e6).toFixed(1)+'M':a>=1e3?'$'+(a/1e3).toFixed(a%1e3===0?0:1)+'K':'$'+a;
 const fmtDate=s=>{if(!s)return'—';const d=new Date(s);return(d.getMonth()+1)+'/'+(d.getDate());};
@@ -1510,7 +1510,7 @@ function renderForecast(){
   const active=deals.filter(d=>ACTIVE.has(d.s));
   const pipe=active.reduce((s,d)=>s+(d.a||0),0);
   const weighted=active.reduce((s,d)=>s+(d.a||0)*prob(d),0);
-  const now=new Date("2026-05-17"),endMay=new Date("2026-05-31"),end30=new Date("2026-06-08");
+  const now=new Date("2026-05-18"),endMay=new Date("2026-05-31"),end30=new Date("2026-06-08");
   const closingMay=deals.filter(d=>{if(!d.c)return false;const dd=new Date(d.c);return dd>=now&&dd<=endMay;});
   const closing30=deals.filter(d=>{if(!d.c)return false;const dd=new Date(d.c);return dd>=now&&dd<=end30;});
   document.getElementById('forecast-kpis').innerHTML=`
