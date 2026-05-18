@@ -2028,6 +2028,22 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.removeItem('spyne_pod_user');
     }
   }
+  // Bind search input
+  const inp = document.getElementById('hs-search-input');
+  if(inp) {
+    let hsTimer;
+    inp.addEventListener('input', e => {
+      const q = e.target.value.trim();
+      clearTimeout(hsTimer);
+      const body = document.getElementById('hs-modal-body');
+      if(q.length < 2) {
+        body.innerHTML = '<div class="hs-modal-hint">Search deals and contacts</div>';
+        return;
+      }
+      hsTimer = setTimeout(() => runLocalSearch(q), 200);
+    });
+  }
+
 });
 
 
@@ -2091,22 +2107,7 @@ function runLocalSearch(q) {
     </div>`).join('');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const inp = document.getElementById('hs-search-input');
-  if(inp) {
-    let hsTimer;
-    inp.addEventListener('input', e => {
-      const q = e.target.value.trim();
-      clearTimeout(hsTimer);
-      const body = document.getElementById('hs-modal-body');
-      if(q.length < 2) {
-        body.innerHTML = '<div class="hs-modal-hint">Search deals and contacts</div>';
-        return;
-      }
-      hsTimer = setTimeout(() => runLocalSearch(q), 200);
-    });
-  }
-});
+
 
 
 </script>
