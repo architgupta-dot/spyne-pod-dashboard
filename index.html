@@ -362,7 +362,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" stroke-width="2"/><path stroke-width="2" d="M16 2v4M8 2v4M3 10h18"/></svg>Meeting Intel</div>
     <div class="nav-item" onclick="switchTab('vpforecast',this)">
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>VP Forecast</div>
-    <div class="nav-item" onclick="switchTab('meetings',this)"><svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" stroke-width="2"/><path stroke-width="2" d="M16 2v4M8 2v4M3 10h18"/></svg>Meeting Intel</div>
+    
   </div>
   <div class="sidebar-bottom">
     <div class="user-badge">
@@ -680,49 +680,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
     <div class="tab-pane" id="tab-meetings" style="display:none">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
         <div>
-          <div style="font-size:14px;font-weight:700;color:var(--text)">Meeting Intel</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">Your meetings from HubSpot · Follow-up tracker</div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <div style="display:flex;gap:4px">
-            <button class="di-tab f-all active" id="mf-all" onclick="setMeetingFilter('all',this)">All</button>
-            <button class="di-tab" id="mf-demo" onclick="setMeetingFilter('Demo',this)">Demo</button>
-            <button class="di-tab" id="mf-disc" onclick="setMeetingFilter('Discussion',this)">Discussion</button>
-            <button class="di-tab" id="mf-ob" onclick="setMeetingFilter('Onboarding',this)">Onboarding</button>
-            <button class="di-tab" id="mf-fu" onclick="setMeetingFilter('followup',this)">&#9888; Needs Follow-Up</button>
-          </div>
-          <input class="search-bar" id="meeting-search" type="text" placeholder="Search company or meeting..." style="margin:0;width:220px">
-        </div>
-      </div>
-      <!-- KPI row -->
-      <div id="meeting-kpis" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px"></div>
-      <!-- Table -->
-      <div class="card" style="padding:0;overflow:hidden">
-        <div style="overflow-x:auto">
-          <table class="di-table">
-            <thead><tr>
-              <th>Company</th>
-              <th>Meeting</th>
-              <th>Type</th>
-              <th>Date</th>
-              <th>Days Ago</th>
-              <th>Follow-Up Action</th>
-              <th>HubSpot</th>
-            </tr></thead>
-            <tbody id="meeting-tbody"></tbody>
-          </table>
-        </div>
-        <div id="meeting-footer" style="padding:10px 16px;border-top:1px solid var(--border);background:#fafafa;font-size:11px;color:var(--muted)"></div>
-      </div>
-    </div>
-
-    
-
-    <div class="tab-pane" id="tab-meetings" style="display:none">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
-        <div>
           <div style="font-size:15px;font-weight:700;color:var(--text)">Meeting Intel</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">Live from HubSpot &middot; Click any follow-up to mark done &middot; 33 meetings loaded</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Live from HubSpot &middot; Click any follow-up to mark done &middot; 33 meetings</div>
         </div>
         <input id="mtg-search" type="text" class="search-bar" placeholder="Search company or meeting..." style="margin:0;width:230px">
       </div>
@@ -754,6 +713,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
         <div id="mtg-footer" style="padding:10px 16px;border-top:1px solid var(--border);background:var(--hover);font-size:11px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap"></div>
       </div>
     </div>
+
+    
+
+    
 <script>
 const HS_BASE="https://app.hubspot.com/contacts/242626590";
 const OWNERS={
