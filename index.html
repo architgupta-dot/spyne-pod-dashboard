@@ -266,6 +266,33 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
 .vpf-bar-wrap{height:6px;border-radius:3px;background:var(--border);overflow:hidden;width:80px;display:inline-block;vertical-align:middle}
 .vpf-bar-fill{height:100%;border-radius:3px}
 
+
+/* Meeting Intel */
+.m-type-demo{background:#e6f7f2;color:#0d9e75;border:1px solid #6ee7c7;font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
+.m-type-disc{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
+.m-type-ob{background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe;font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
+.m-type-meet{background:#f9fafb;color:#6b7280;border:1px solid #e5e7eb;font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
+.m-followup{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;color:#d97706;background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:3px 9px;cursor:pointer;transition:all 0.12s;white-space:nowrap}
+.m-followup:hover{background:#fef3c7;border-color:#f59e0b}
+.m-followup.done{color:#059669;background:#ecfdf5;border-color:#6ee7b7;text-decoration:line-through;opacity:0.7}
+.m-days{font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px}
+.m-days-hot{background:#fef2f2;color:#dc2626}
+.m-days-warm{background:#fff7ed;color:#ea580c}
+.m-days-ok{background:#f9fafb;color:#6b7280}
+
+
+/* ── Meeting Intel ───────────────────────────── */
+.mt-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap;display:inline-block}
+.mt-demo{background:#e6f7f2;color:#0d9e75;border:1px solid #6ee7c7}
+.mt-disc{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe}
+.mt-ob{background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe}
+.mt-part{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa}
+.mt-days{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
+.mt-hot{background:#fef2f2;color:#dc2626}.mt-warm{background:#fff7ed;color:#c2410c}
+.mt-mild{background:#fffbeb;color:#d97706}.mt-cool{background:#f0fdf4;color:#059669}
+.fu-btn{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:7px;border:1.5px solid #fde68a;background:#fffbeb;color:#b45309;cursor:pointer;transition:all 0.12s;white-space:nowrap}
+.fu-btn:hover{background:#fef3c7;border-color:#f59e0b}
+.fu-btn.fu-done{background:#ecfdf5;border-color:#6ee7b7;color:#059669;text-decoration:line-through;opacity:0.75}
 </style>
 </head>
 <body>
@@ -331,8 +358,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>Forms &amp; Engagement</div>
     <div class="nav-item" onclick="switchTab('forecast',this)">
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M3 17l6-6 4 4 8-8"/></svg>Forecast</div>
+    <div class="nav-item" onclick="switchTab('meetings',this)">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" stroke-width="2"/><path stroke-width="2" d="M16 2v4M8 2v4M3 10h18"/></svg>Meeting Intel</div>
     <div class="nav-item" onclick="switchTab('vpforecast',this)">
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>VP Forecast</div>
+    <div class="nav-item" onclick="switchTab('meetings',this)"><svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" stroke-width="2"/><path stroke-width="2" d="M16 2v4M8 2v4M3 10h18"/></svg>Meeting Intel</div>
   </div>
   <div class="sidebar-bottom">
     <div class="user-badge">
@@ -646,6 +676,84 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
 
 <div class="toast" id="toast"></div>
 
+
+    <div class="tab-pane" id="tab-meetings" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+        <div>
+          <div style="font-size:14px;font-weight:700;color:var(--text)">Meeting Intel</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Your meetings from HubSpot · Follow-up tracker</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <div style="display:flex;gap:4px">
+            <button class="di-tab f-all active" id="mf-all" onclick="setMeetingFilter('all',this)">All</button>
+            <button class="di-tab" id="mf-demo" onclick="setMeetingFilter('Demo',this)">Demo</button>
+            <button class="di-tab" id="mf-disc" onclick="setMeetingFilter('Discussion',this)">Discussion</button>
+            <button class="di-tab" id="mf-ob" onclick="setMeetingFilter('Onboarding',this)">Onboarding</button>
+            <button class="di-tab" id="mf-fu" onclick="setMeetingFilter('followup',this)">&#9888; Needs Follow-Up</button>
+          </div>
+          <input class="search-bar" id="meeting-search" type="text" placeholder="Search company or meeting..." style="margin:0;width:220px">
+        </div>
+      </div>
+      <!-- KPI row -->
+      <div id="meeting-kpis" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px"></div>
+      <!-- Table -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="overflow-x:auto">
+          <table class="di-table">
+            <thead><tr>
+              <th>Company</th>
+              <th>Meeting</th>
+              <th>Type</th>
+              <th>Date</th>
+              <th>Days Ago</th>
+              <th>Follow-Up Action</th>
+              <th>HubSpot</th>
+            </tr></thead>
+            <tbody id="meeting-tbody"></tbody>
+          </table>
+        </div>
+        <div id="meeting-footer" style="padding:10px 16px;border-top:1px solid var(--border);background:#fafafa;font-size:11px;color:var(--muted)"></div>
+      </div>
+    </div>
+
+    
+
+    <div class="tab-pane" id="tab-meetings" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+        <div>
+          <div style="font-size:15px;font-weight:700;color:var(--text)">Meeting Intel</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Live from HubSpot &middot; Click any follow-up to mark done &middot; 33 meetings loaded</div>
+        </div>
+        <input id="mtg-search" type="text" class="search-bar" placeholder="Search company or meeting..." style="margin:0;width:230px">
+      </div>
+      <div id="mtg-kpis" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px"></div>
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+        <button class="di-tab f-all active" id="mtgf-all" onclick="setMtgFilter('all',this)">All</button>
+        <button class="di-tab" id="mtgf-Demo" onclick="setMtgFilter('Demo',this)">Demo</button>
+        <button class="di-tab" id="mtgf-Discussion" onclick="setMtgFilter('Discussion',this)">Discussion</button>
+        <button class="di-tab" id="mtgf-Partnership" onclick="setMtgFilter('Partnership',this)">Partnership</button>
+        <button class="di-tab" id="mtgf-Onboarding" onclick="setMtgFilter('Onboarding',this)">Onboarding</button>
+        <button class="di-tab" style="border-color:#f59e0b;color:#b45309" id="mtgf-pending" onclick="setMtgFilter('pending',this)">&#9888; Needs Follow-Up</button>
+        <button class="di-tab" style="border-color:#6ee7b7;color:#059669" id="mtgf-done" onclick="setMtgFilter('done',this)">&#10003; Done</button>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="overflow-x:auto">
+          <table class="di-table">
+            <thead><tr>
+              <th style="min-width:150px">Company</th>
+              <th style="min-width:200px">Meeting Title</th>
+              <th>Type</th>
+              <th>Date</th>
+              <th>Days Ago</th>
+              <th style="min-width:210px">Follow-Up Action</th>
+              <th>Link</th>
+            </tr></thead>
+            <tbody id="mtg-tbody"></tbody>
+          </table>
+        </div>
+        <div id="mtg-footer" style="padding:10px 16px;border-top:1px solid var(--border);background:var(--hover);font-size:11px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap"></div>
+      </div>
+    </div>
 <script>
 const HS_BASE="https://app.hubspot.com/contacts/242626590";
 const OWNERS={
@@ -704,18 +812,21 @@ const USERS = {
 const PASSWORD = "archie123";
 
 const DEALS=[
-  {id:"325661395645",n:"Over Drive - Studio",a:2200,s:"1534611155",o:"67333606",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/325661395645"},
-  {id:"324842350329",n:"West Mitsubishi",a:0,s:"1534610164",o:"160673631",c:"2026-05-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324842350329"},
-  {id:"89864239859",n:"John Andrew Used Cars",a:3000,s:"1534611162",o:"67333606",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/89864239859"},
-  {id:"259790918393",n:"Imperial Cars - CI Deal",a:19200,s:"1534611154",o:"67333606",c:"2026-01-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/259790918393"},
-  {id:"326027352796",n:"Graff Chevrolet GMC of Michigan City",a:12000,s:"1534611153",o:"67333606",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/326027352796"},
+  {id:"276106713812",n:"Upstate Automotive Group",a:0,s:"1534610164",o:"159865948",c:"2026-02-28",url:"https://app.hubspot.com/contacts/242626590/record/0-3/276106713812"},
   {id:"325250622152",n:"Rusty Wallis Honda",a:0,s:"1534610164",o:"79528942",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/325250622152"},
-  {id:"259779403452",n:"Michiana Chrysler Dodge Jeep Ram",a:0,s:"1534610164",o:"160673631",c:"2026-01-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/259779403452"},
+  {id:"325724136139",n:"Kia Of Canton",a:0,s:"1534611151",o:"67333606",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/325724136139"},
+  {id:"324288557764",n:"Payne Edinburg",a:0,s:"1534610164",o:"69016314",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324288557764"},
+  {id:"89864239859",n:"John Andrew Used Cars",a:3000,s:"1534611162",o:"67333606",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/89864239859"},
+  {id:"325661395645",n:"Over Drive - Studio",a:2200,s:"1534611155",o:"67333606",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/325661395645"},
+  {id:"324818101948",n:"Sansone Hyundai",a:38400,s:"1534611154",o:"67333606",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324818101948"},
+  {id:"324965554927",n:"Steve White Auto Group",a:18000,s:"1534611154",o:"160419465",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324965554927"},
   {id:"324802793148",n:"terryk@southbank.ca",a:7200,s:"1534611154",o:"67333606",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324802793148"},
+  {id:"324842350329",n:"West Mitsubishi",a:0,s:"1534610164",o:"160673631",c:"2026-05-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324842350329"},
+  {id:"259790918393",n:"Imperial Cars - CI Deal",a:19200,s:"1534611154",o:"67333606",c:"2026-01-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/259790918393"},
+  {id:"259779403452",n:"Michiana Chrysler Dodge Jeep Ram",a:0,s:"1534610164",o:"160673631",c:"2026-01-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/259779403452"},
   {id:"326023759558",n:"Liberty Volkswagen - Studio",a:6000,s:"1534611153",o:"160768701",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/326023759558"},
   {id:"324842235590",n:"Mullinax Ford - Asotu Con",a:0,s:"1534610164",o:"160214774",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324842235590"},
   {id:"128835827443",n:"DFW Auto Sources",a:4788,s:"1534611164",o:"160419465",c:"2025-07-12",url:"https://app.hubspot.com/contacts/242626590/record/0-3/128835827443"},
-  {id:"276106713812",n:"Upstate Automotive Group",a:0,s:"1534610164",o:"159865948",c:"2026-02-28",url:"https://app.hubspot.com/contacts/242626590/record/0-3/276106713812"},
   {id:"244270880457",n:"Kelowna Ford and Lincoln",a:5988,s:"1534611154",o:"160419465",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/244270880457"},
   {id:"322444849867",n:"RC Hill Honda Powersports",a:5400,s:"1534611164",o:"160768701",c:"2026-04-27",url:"https://app.hubspot.com/contacts/242626590/record/0-3/322444849867"},
   {id:"324287835850",n:"Carter Myers Automotive",a:0,s:"1534610164",o:"69016314",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324287835850"},
@@ -733,14 +844,11 @@ const DEALS=[
   {id:"325818290875",n:"Patriot Acura",a:0,s:"1534611151",o:"67333606",c:"2026-05-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/325818290875"},
   {id:"322911412980",n:"Central Auto Inc.",a:18000,s:"1534611159",o:"160419465",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/322911412980"},
   {id:"323519182575",n:"Kernersville CDJR - Convo",a:9600,s:"1534611154",o:"67333606",c:"2026-05-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/323519182575"},
-  {id:"325724136139",n:"Kia Of Canton",a:0,s:"1534611151",o:"160673631",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/325724136139"},
-  {id:"324965554927",n:"Steve White Auto Group",a:18000,s:"1534611154",o:"160419465",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324965554927"},
   {id:"212628187884",n:"Dean Carter Chevy",a:4200,s:"1534611164",o:"67333606",c:"2025-11-18",url:"https://app.hubspot.com/contacts/242626590/record/0-3/212628187884"},
   {id:"322910599924",n:"Ariana Motors",a:4800,s:"1534611153",o:"67333606",c:"2026-05-06",url:"https://app.hubspot.com/contacts/242626590/record/0-3/322910599924"},
   {id:"315764835016",n:"Dralle Chevrolet Buick GMC",a:17988,s:"1534611159",o:"160768701",c:"2026-05-29",url:"https://app.hubspot.com/contacts/242626590/record/0-3/315764835016"},
   {id:"279889087225",n:"Apple Chevrolet",a:0,s:"1534610164",o:"160043135",c:"2026-01-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/279889087225"},
   {id:"280925140684",n:"Keast Auto Center NADA",a:0,s:"1534610164",o:"160214774",c:"2026-02-28",url:"https://app.hubspot.com/contacts/242626590/record/0-3/280925140684"},
-  {id:"324818101948",n:"Sansone Hyundai",a:38400,s:"1534611154",o:"67333606",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324818101948"},
   {id:"324281328357",n:"Price Ford Of Simi Valley",a:0,s:"1534610164",o:"159865948",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324281328357"},
   {id:"307163414219",n:"Murgado MB Foothill Ranch - CI",a:100752,s:"1534611162",o:"160575588",c:"2026-03-09",url:"https://app.hubspot.com/contacts/242626590/record/0-3/307163414219"},
   {id:"320212951779",n:"Airport Marina Honda",a:81576,s:"1534611159",o:"160575588",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/320212951779"},
@@ -751,14 +859,13 @@ const DEALS=[
   {id:"324841506543",n:"Luther Auto",a:0,s:"1534610164",o:"69016314",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324841506543"},
   {id:"324289275616",n:"Kemna Auto - VINI",a:12000,s:"1534611154",o:"160768701",c:"2026-05-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324289275616"},
   {id:"301218086612",n:"Car Revolutions - Studio",a:12000,s:"1534611153",o:"160768701",c:"2026-05-13",url:"https://app.hubspot.com/contacts/242626590/record/0-3/301218086612"},
+  {id:"296279899873",n:"Heights Nissan - Convo",a:45600,s:"1534611154",o:"160768701",c:"2026-02-28",url:"https://app.hubspot.com/contacts/242626590/record/0-3/296279899873"},
   {id:"296273418999",n:"Northstar Kia",a:45600,s:"1534611154",o:"160768701",c:"2026-02-28",url:"https://app.hubspot.com/contacts/242626590/record/0-3/296273418999"},
   {id:"269511857913",n:"Fairway Lincoln",a:53976,s:"1534611154",o:"160768701",c:"2026-01-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/269511857913"},
-  {id:"296279899873",n:"Heights Nissan - Convo",a:45600,s:"1534611154",o:"160768701",c:"2026-02-28",url:"https://app.hubspot.com/contacts/242626590/record/0-3/296279899873"},
   {id:"235887282930",n:"Feldmann Imports MB 2",a:0,s:"1534611151",o:"67333606",c:"2025-12-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/235887282930"},
   {id:"320623126221",n:"TommyCar Auto Group - Convo AI",a:0,s:"1534610164",o:"160214774",c:"2026-04-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/320623126221"},
   {id:"320334834385",n:"Auto West Group - Convo AI",a:0,s:"1534610164",o:"159865948",c:"2026-04-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/320334834385"},
   {id:"324281349835",n:"Curry Acura - Vini",a:9600,s:"1534611154",o:"67333606",c:"2026-05-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324281349835"},
-  {id:"324288557764",n:"Payne Edinburg",a:0,s:"1534610164",o:"69016314",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324288557764"},
   {id:"296274141934",n:"Mb Motors LLC NADA",a:3000,s:"1534611164",o:"160575588",c:"2026-02-18",url:"https://app.hubspot.com/contacts/242626590/record/0-3/296274141934"},
   {id:"203233601240",n:"Anderson Ford South",a:9600,s:"1534611159",o:"67333606",c:"2025-10-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/203233601240"},
   {id:"307175361219",n:"Anderson Auto Group - Convo",a:172800,s:"1534611159",o:"67333606",c:"2026-03-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/307175361219"},
@@ -887,17 +994,19 @@ const DEALS=[
   {id:"84294514382",n:"Dickson City Hyundai",a:0,s:"1534610164",o:"66975998",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/84294514382"},
   {id:"84615496386",n:"Bell Road Mitsubishi",a:3840,s:"1534610164",o:"66975998",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/84615496386"},
   {id:"84535207638",n:"Exclusive Motor Cars LLC",a:1716,s:"1534610164",o:"66975998",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/84535207638"},
-  {id:"84488948419",n:"Junge Automotive Group",a:0,s:"1534610164",o:"66975998",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/84488948419"}
+  {id:"84488948419",n:"Junge Automotive Group",a:0,s:"1534610164",o:"66975998",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/84488948419"},
+  {id:"326027352796",n:"Graff Chevrolet GMC of Michigan City",a:12000,s:"1534611153",o:"67333606",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/326027352796"}
 ];
 
 const DEMO_DEALS=[
-  {id:"324842350329",n:"West Mitsubishi",a:0,s:"1534610164",o:"160673631",c:"2026-05-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324842350329"},
-  {id:"326027352796",n:"Graff Chevrolet GMC of Michigan City",a:12000,s:"1534611153",o:"67333606",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/326027352796"},
+  {id:"276106713812",n:"Upstate Automotive Group",a:0,s:"1534610164",o:"159865948",c:"2026-02-28",url:"https://app.hubspot.com/contacts/242626590/record/0-3/276106713812"},
   {id:"325250622152",n:"Rusty Wallis Honda",a:0,s:"1534610164",o:"79528942",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/325250622152"},
+  {id:"325724136139",n:"Kia Of Canton",a:0,s:"1534611151",o:"67333606",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/325724136139"},
+  {id:"324288557764",n:"Payne Edinburg",a:0,s:"1534610164",o:"69016314",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324288557764"},
+  {id:"324842350329",n:"West Mitsubishi",a:0,s:"1534610164",o:"160673631",c:"2026-05-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324842350329"},
   {id:"259779403452",n:"Michiana Chrysler Dodge Jeep Ram",a:0,s:"1534610164",o:"160673631",c:"2026-01-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/259779403452"},
   {id:"326023759558",n:"Liberty Volkswagen - Studio",a:6000,s:"1534611153",o:"160768701",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/326023759558"},
   {id:"324842235590",n:"Mullinax Ford - Asotu Con",a:0,s:"1534610164",o:"160214774",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324842235590"},
-  {id:"276106713812",n:"Upstate Automotive Group",a:0,s:"1534610164",o:"159865948",c:"2026-02-28",url:"https://app.hubspot.com/contacts/242626590/record/0-3/276106713812"},
   {id:"324287835850",n:"Carter Myers Automotive",a:0,s:"1534610164",o:"69016314",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324287835850"},
   {id:"271394178768",n:"Bill Cram Inc",a:0,s:"1534610164",o:"159865948",c:"2026-02-28",url:"https://app.hubspot.com/contacts/242626590/record/0-3/271394178768"},
   {id:"324940356299",n:"Nissan of Omaha",a:0,s:"1534610164",o:"160673631",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324940356299"},
@@ -905,7 +1014,6 @@ const DEMO_DEALS=[
   {id:"324816335565",n:"Bob Rohrman Toyota",a:0,s:"1534610164",o:"69016314",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324816335565"},
   {id:"322469496536",n:"Brown-Daub Chevrolet Of Nazareth",a:0,s:"1534610164",o:"79528942",c:"2026-04-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/322469496536"},
   {id:"325818290875",n:"Patriot Acura",a:0,s:"1534611151",o:"67333606",c:"2026-05-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/325818290875"},
-  {id:"325724136139",n:"Kia Of Canton",a:0,s:"1534611151",o:"160673631",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/325724136139"},
   {id:"322910599924",n:"Ariana Motors",a:4800,s:"1534611153",o:"67333606",c:"2026-05-06",url:"https://app.hubspot.com/contacts/242626590/record/0-3/322910599924"},
   {id:"279889087225",n:"Apple Chevrolet",a:0,s:"1534610164",o:"160043135",c:"2026-01-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/279889087225"},
   {id:"280925140684",n:"Keast Auto Center NADA",a:0,s:"1534610164",o:"160214774",c:"2026-02-28",url:"https://app.hubspot.com/contacts/242626590/record/0-3/280925140684"},
@@ -915,7 +1023,6 @@ const DEMO_DEALS=[
   {id:"235887282930",n:"Feldmann Imports MB 2",a:0,s:"1534611151",o:"67333606",c:"2025-12-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/235887282930"},
   {id:"320623126221",n:"TommyCar Auto Group - Convo AI",a:0,s:"1534610164",o:"160214774",c:"2026-04-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/320623126221"},
   {id:"320334834385",n:"Auto West Group - Convo AI",a:0,s:"1534610164",o:"159865948",c:"2026-04-30",url:"https://app.hubspot.com/contacts/242626590/record/0-3/320334834385"},
-  {id:"324288557764",n:"Payne Edinburg",a:0,s:"1534610164",o:"69016314",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324288557764"},
   {id:"84485370599",n:"Main Street Motors of Gainesville",a:4320,s:"1534610164",o:"66975998",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/84485370599"},
   {id:"84613698278",n:"Morlan Chrysler",a:0,s:"1534610164",o:"66975998",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/84613698278"},
   {id:"84488960704",n:"Toyota Marin",a:26400,s:"1534610164",o:"66975998",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/84488960704"},
@@ -983,14 +1090,15 @@ const DEMO_DEALS=[
   {id:"84294514382",n:"Dickson City Hyundai",a:0,s:"1534610164",o:"66975998",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/84294514382"},
   {id:"84615496386",n:"Bell Road Mitsubishi",a:3840,s:"1534610164",o:"66975998",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/84615496386"},
   {id:"84535207638",n:"Exclusive Motor Cars LLC",a:1716,s:"1534610164",o:"66975998",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/84535207638"},
-  {id:"84488948419",n:"Junge Automotive Group",a:0,s:"1534610164",o:"66975998",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/84488948419"}
+  {id:"84488948419",n:"Junge Automotive Group",a:0,s:"1534610164",o:"66975998",c:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/84488948419"},
+  {id:"326027352796",n:"Graff Chevrolet GMC of Michigan City",a:12000,s:"1534611153",o:"67333606",c:"2026-05-31",url:"https://app.hubspot.com/contacts/242626590/record/0-3/326027352796"}
 ];
 
 const IN_DISCUSSION_DEALS=[
   {id:"322525159098",n:"Shea Auto Group - Convo",a:144000,o:"160575588",c:"",cr:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/322525159098"},
   {id:"269511857913",n:"Fairway Lincoln",a:53976,o:"160768701",c:"2026-01-31",cr:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/269511857913"},
-  {id:"296273418999",n:"Northstar Kia",a:45600,o:"160768701",c:"2026-02-28",cr:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/296273418999"},
   {id:"296279899873",n:"Heights Nissan - Convo",a:45600,o:"160768701",c:"2026-02-28",cr:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/296279899873"},
+  {id:"296273418999",n:"Northstar Kia",a:45600,o:"160768701",c:"2026-02-28",cr:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/296273418999"},
   {id:"271450837707",n:"Dorsett Automotive - VINI",a:43200,o:"67333606",c:"",cr:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/271450837707"},
   {id:"324818101948",n:"Sansone Hyundai",a:38400,o:"67333606",c:"2026-05-31",cr:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/324818101948"},
   {id:"320535940837",n:"Grupo EBD",a:34800,o:"160419465",c:"2026-04-29",cr:"",url:"https://app.hubspot.com/contacts/242626590/record/0-3/320535940837"},
@@ -1020,6 +1128,11 @@ const FP_DEALS=[
 ];
 
 const LEADS_DATA=[
+  {id:"489032859343",n:"Marc Goldberg",co:"Crown Honda",ti:"General Manager",em:"marc@gulfcoastclassicsllc.com",o:"160673631",stage:"lead",cr:"2026-05-20",src:"Inbound",url:"https://app.hubspot.com/contacts/242626590/record/0-1/489032859343"},
+  {id:"489027086050",n:"Majji -",co:"My Choice Motors Elmhurst",ti:"Owner",em:"salesjoliet@youchoiceauto.com",o:"160673631",stage:"lead",cr:"2026-05-20",src:"Inbound",url:"https://app.hubspot.com/contacts/242626590/record/0-1/489027086050"},
+  {id:"489034269422",n:"Timothy Mckay",co:"Art Hill Ford",ti:"Service Director",em:"t.mckay@arthillautogroup.com",o:"160673631",stage:"lead",cr:"2026-05-20",src:"Inbound",url:"https://app.hubspot.com/contacts/242626590/record/0-1/489034269422"},
+  {id:"488438269680",n:"John Anderson",co:"Hank Graff",ti:"General Manager",em:"john.anderson@hankgraff.com",o:"67333606",stage:"lead",cr:"2026-05-20",src:"Inbound",url:"https://app.hubspot.com/contacts/242626590/record/0-1/488438269680"},
+  {id:"488560663235",n:"rbrand@southbank.ca",co:"",ti:"",em:"rbrand@southbank.ca",o:"67333606",stage:"lead",cr:"2026-05-20",src:"Inbound",url:"https://app.hubspot.com/contacts/242626590/record/0-1/488560663235"},
   {id:"488560579280",n:"Hashmi Eid",co:"Ariana Motors",ti:"Owner",em:"hashmieid@dfw.com",o:"67333606",stage:"lead",cr:"2026-05-19",src:"Manual/Offline",url:"https://app.hubspot.com/contacts/242626590/record/0-1/488560579280"},
   {id:"488560529129",n:"jpartlow",co:"Sport Automotive",ti:"",em:"jpartlow@sportautomotive.com",o:"79528942",stage:"lead",cr:"2026-05-19",src:"Manual/Offline",url:"https://app.hubspot.com/contacts/242626590/record/0-1/488560529129"},
   {id:"488559809245",n:"rmcbride",co:"Sport Automotive",ti:"",em:"rmcbride@sportautomotive.com",o:"79528942",stage:"lead",cr:"2026-05-19",src:"Manual/Offline",url:"https://app.hubspot.com/contacts/242626590/record/0-1/488559809245"},
@@ -1123,6 +1236,11 @@ const LEADS_DATA=[
 ];
 
 const INBOUND_LEADS_DATA=[
+  {id:"489032859343",n:"Marc Goldberg",co:"Crown Honda",ti:"General Manager",em:"marc@gulfcoastclassicsllc.com",o:"160673631",stage:"lead",cr:"2026-05-20",src:"Inbound",url:"https://app.hubspot.com/contacts/242626590/record/0-1/489032859343"},
+  {id:"489027086050",n:"Majji -",co:"My Choice Motors Elmhurst",ti:"Owner",em:"salesjoliet@youchoiceauto.com",o:"160673631",stage:"lead",cr:"2026-05-20",src:"Inbound",url:"https://app.hubspot.com/contacts/242626590/record/0-1/489027086050"},
+  {id:"489034269422",n:"Timothy Mckay",co:"Art Hill Ford",ti:"Service Director",em:"t.mckay@arthillautogroup.com",o:"160673631",stage:"lead",cr:"2026-05-20",src:"Inbound",url:"https://app.hubspot.com/contacts/242626590/record/0-1/489034269422"},
+  {id:"488438269680",n:"John Anderson",co:"Hank Graff",ti:"General Manager",em:"john.anderson@hankgraff.com",o:"67333606",stage:"lead",cr:"2026-05-20",src:"Inbound",url:"https://app.hubspot.com/contacts/242626590/record/0-1/488438269680"},
+  {id:"488560663235",n:"rbrand@southbank.ca",co:"",ti:"",em:"rbrand@southbank.ca",o:"67333606",stage:"lead",cr:"2026-05-20",src:"Inbound",url:"https://app.hubspot.com/contacts/242626590/record/0-1/488560663235"},
   {id:"488560579280",n:"Hashmi Eid",co:"Ariana Motors",ti:"Owner",em:"hashmieid@dfw.com",o:"67333606",stage:"lead",cr:"2026-05-19",src:"Offline",url:"https://app.hubspot.com/contacts/242626590/record/0-1/488560579280"},
   {id:"488560529129",n:"jpartlow",co:"Sport Automotive",ti:"",em:"jpartlow@sportautomotive.com",o:"79528942",stage:"lead",cr:"2026-05-19",src:"Offline",url:"https://app.hubspot.com/contacts/242626590/record/0-1/488560529129"},
   {id:"488559809245",n:"rmcbride",co:"Sport Automotive",ti:"",em:"rmcbride@sportautomotive.com",o:"79528942",stage:"lead",cr:"2026-05-19",src:"Offline",url:"https://app.hubspot.com/contacts/242626590/record/0-1/488559809245"},
@@ -1437,7 +1555,7 @@ function switchTab(tab,el){
   const tabEl=document.getElementById('tab-'+tab); if(tabEl) tabEl.style.display='block';
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(el)el.classList.add('active');
-  const titles={summary:"Summary",pipeline:"Pipeline",leads:"Lead Management",stale:"Stale Accounts",inbound:"Inbound Leads",factors:"Factors AI Alerts",forecast:"Forecast",vpforecast:"VP Forecast Intelligence",demostage:"Demo Stage",indiscussion:"In Discussion",futureprospect:"Future Prospect",leads:"Leads",closed:"Closed Accounts",engagements:"Forms & Engagement"};
+  const titles={summary:"Summary",pipeline:"Pipeline",leads:"Lead Management",stale:"Stale Accounts",inbound:"Inbound Leads",factors:"Factors AI Alerts",forecast:"Forecast",vpforecast:"VP Forecast Intelligence",meetings:"Meeting Intel",meetings:"Meeting Intel",demostage:"Demo Stage",indiscussion:"In Discussion",futureprospect:"Future Prospect",leads:"Leads",closed:"Closed Accounts",engagements:"Forms & Engagement"};
   document.getElementById('page-title').textContent=titles[tab]||tab;
   renderCurrentTab();
 }
@@ -1453,7 +1571,7 @@ function renderCurrentTab(){
     }, 10);
   }
 
-  const r={summary:renderSummary,pipeline:renderPipeline,leads:renderLeads,stale:renderStale,inbound:renderInboundLeads,factors:renderFactors,forecast:renderForecast,vpforecast:renderVPF,demostage:renderDemoStage,indiscussion:renderInDiscussion,futureprospect:renderFutureProspect,closed:renderClosed,engagements:renderEngagements};
+  const r={summary:renderSummary,pipeline:renderPipeline,leads:renderLeads,stale:renderStale,inbound:renderInboundLeads,factors:renderFactors,forecast:renderForecast,vpforecast:renderVPF,meetings:renderMeetings,meetings:renderMeetings,demostage:renderDemoStage,indiscussion:renderInDiscussion,futureprospect:renderFutureProspect,closed:renderClosed,engagements:renderEngagements};
   if(r[currentTab]) { try { r[currentTab](); } catch(e) { console.warn('render error',currentTab,e); } }
 }
 function dealRow(d,showProb=false){
@@ -2094,6 +2212,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   // Bind search input
+  var ms=document.getElementById('mtg-search');if(ms)ms.addEventListener('input',renderMeetings);
   const inp = document.getElementById('hs-search-input');
   if(inp) {
     let hsTimer;
@@ -2392,6 +2511,109 @@ function renderVPF() {
       </div>`;
     }).join('') || '<div class="empty">No data</div>';
   }
+}
+
+
+
+
+let _meetingFilter = 'all';
+const _meetingDone = {};
+
+function setMeetingFilter(f, el) {
+  _meetingFilter = f;
+  document.querySelectorAll('#tab-meetings .di-tab').forEach(b => b.classList.remove('active'));
+  if(el) el.classList.add('active');
+  renderMeetings();
+}
+
+function toggleFollowUp(id) {
+  _meetingDone[id] = !_meetingDone[id];
+  renderMeetings();
+}
+
+
+
+var MEETINGS_DATA=[
+  {id:"336676744904",title:"Heights Nissan X Spyne - AI Agents",company:"Heights Nissan",date:"2026-02-12",type:"Demo",followup:"Send proposal",url:"https://app.hubspot.com/contacts/242626590/record/0-15/336676744904"},
+  {id:"337146115804",title:"Auto Elite X Spyne - Final Meeting",company:"Auto Elite",date:"2026-02-12",type:"Partnership",followup:"Close the deal",url:"https://app.hubspot.com/contacts/242626590/record/0-15/337146115804"},
+  {id:"336474174144",title:"Heights Nissan X Spyne - Demo",company:"Heights Nissan",date:"2026-02-11",type:"Demo",followup:"Send proposal",url:"https://app.hubspot.com/contacts/242626590/record/0-15/336474174144"},
+  {id:"335415302852",title:"Davidson Auto Group X Spyne - Discussion",company:"Davidson Auto Group",date:"2026-02-11",type:"Discussion",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/335415302852"},
+  {id:"335221399244",title:"Davidson Auto Group X Spyne - Discussion",company:"Davidson Auto Group",date:"2026-02-10",type:"Discussion",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/335221399244"},
+  {id:"303864817342",title:"Toyota of Ann Arbor X Spyne AI",company:"Toyota of Ann Arbor AI",date:"2026-01-20",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/303864817342"},
+  {id:"231829368538",title:"Anderson Auto Group X Spyne",company:"Anderson Auto Group",date:"2026-01-19",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/231829368538"},
+  {id:"279057752789",title:"Sharpe Cars - Partnership",company:"Sharpe Cars",date:"2026-01-14",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/279057752789"},
+  {id:"287476216517",title:"Graff Ford of Chesterton X Spyne - Onboarding",company:"Graff Ford of Chesterton",date:"2025-12-22",type:"Onboarding",followup:"Check-in on go-live status",url:"https://app.hubspot.com/contacts/242626590/record/0-15/287476216517"},
+  {id:"284278282959",title:"Dave Syverson Auto Center X Spyne - Onboarding",company:"Dave Syverson Auto Center",date:"2025-12-18",type:"Onboarding",followup:"Check-in on go-live status",url:"https://app.hubspot.com/contacts/242626590/record/0-15/284278282959"},
+  {id:"284321576658",title:"National Motors X Spyne - Onboarding",company:"National Motors",date:"2025-12-18",type:"Onboarding",followup:"Check-in on go-live status",url:"https://app.hubspot.com/contacts/242626590/record/0-15/284321576658"},
+  {id:"282632194799",title:"Graff Ford of Chesterton X Spyne - Partnership",company:"Graff Ford of Chesterton",date:"2025-12-17",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/282632194799"},
+  {id:"276662227648",title:"Dave Syverson Auto Center X Spyne - Partnership",company:"Dave Syverson Auto Center",date:"2025-12-16",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/276662227648"},
+  {id:"280432431849",title:"iDeal Auto Imports X Spyne - Website Onboarding",company:"iDeal Auto Imports",date:"2025-12-16",type:"Onboarding",followup:"Check-in on go-live status",url:"https://app.hubspot.com/contacts/242626590/record/0-15/280432431849"},
+  {id:"282428087012",title:"Sell Em All Motors X Spyne - Onboarding",company:"Sell Em All Motors",date:"2025-12-16",type:"Onboarding",followup:"Check-in on go-live status",url:"https://app.hubspot.com/contacts/242626590/record/0-15/282428087012"},
+  {id:"276682806998",title:"iDeal Auto Imports X Spyne - Onboarding",company:"iDeal Auto Imports",date:"2025-12-12",type:"Onboarding",followup:"Check-in on go-live status",url:"https://app.hubspot.com/contacts/242626590/record/0-15/276682806998"},
+  {id:"277405694667",title:"Graff Ford of Chesterton X Spyne - Partnership",company:"Graff Ford of Chesterton",date:"2025-12-12",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/277405694667"},
+  {id:"278311031531",title:"Feldmann Imports X Spyne - Onboarding",company:"Feldmann Imports",date:"2025-12-11",type:"Onboarding",followup:"Check-in on go-live status",url:"https://app.hubspot.com/contacts/242626590/record/0-15/278311031531"},
+  {id:"276400370410",title:"Spradley Auto X Spyne - Partnership",company:"Spradley Auto",date:"2025-12-08",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/276400370410"},
+  {id:"272962691801",title:"Feldman X Spyne - Onboarding Vini",company:"Feldman Vini",date:"2025-12-04",type:"Onboarding",followup:"Check-in on go-live status",url:"https://app.hubspot.com/contacts/242626590/record/0-15/272962691801"},
+  {id:"272335076066",title:"Spyne X Feldmann Imports - Partnership",company:"Feldmann Imports",date:"2025-12-03",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/272335076066"},
+  {id:"272261112566",title:"Feldman X Spyne - Partnership",company:"Feldman",date:"2025-12-02",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/272261112566"},
+  {id:"266267715267",title:"Sundance Chevrolet GMC X Spyne - Partnership",company:"Sundance Chevrolet GMC",date:"2025-12-02",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/266267715267"},
+  {id:"268313621201",title:"Feldman Chevrolet/Kia X Spyne - Vini AI Onboarding",company:"Feldman Chevrolet/Kia",date:"2025-12-01",type:"Onboarding",followup:"Check-in on go-live status",url:"https://app.hubspot.com/contacts/242626590/record/0-15/268313621201"},
+  {id:"267699326657",title:"Speedway Cars X Spyne - Onboarding",company:"Speedway Cars",date:"2025-12-01",type:"Onboarding",followup:"Check-in on go-live status",url:"https://app.hubspot.com/contacts/242626590/record/0-15/267699326657"},
+  {id:"266281911995",title:"Buchanan Auto Park X Spyne - Partnership",company:"Buchanan Auto Park",date:"2025-12-01",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/266281911995"},
+  {id:"266499042010",title:"Yonkers Auto Gallery X Spyne - Partnership",company:"Yonkers Auto Gallery",date:"2025-12-01",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/266499042010"},
+  {id:"268273742525",title:"Bob Ruth Ford X Spyne - Partnership",company:"Bob Ruth Ford",date:"2025-11-28",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/268273742525"},
+  {id:"269065485026",title:"Feldman Chevrolet X Spyne - Partnership",company:"Feldman Chevrolet",date:"2025-11-28",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/269065485026"},
+  {id:"267670636248",title:"Feldman Chevrolet X Spyne - Partnership",company:"Feldman Chevrolet",date:"2025-11-26",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/267670636248"},
+  {id:"267499471595",title:"Rainbow Motor Sales X Spyne - Partnership",company:"Rainbow Motor Sales",date:"2025-11-25",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/267499471595"},
+  {id:"263805579979",title:"Diamond Buick GMC of Alexandria X Spyne - Partnership",company:"Diamond Buick GMC of Alexandria",date:"2025-11-24",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/263805579979"},
+  {id:"263598664389",title:"Feldman Chevrolet X Spyne - Partnership",company:"Feldman Chevrolet",date:"2025-11-21",type:"Partnership",followup:"Follow up on next steps",url:"https://app.hubspot.com/contacts/242626590/record/0-15/263598664389"}
+];
+
+
+var _mtgFilter='all', _mtgDone={};
+function setMtgFilter(f,el){
+  _mtgFilter=f;
+  document.querySelectorAll('#tab-meetings .di-tab').forEach(function(b){b.classList.remove('active');});
+  if(el)el.classList.add('active');
+  renderMeetings();
+}
+function mtgToggleDone(id){_mtgDone[id]=!_mtgDone[id];renderMeetings();}
+function renderMeetings(){
+  if(typeof MEETINGS_DATA==='undefined')return;
+  var tbody=document.getElementById('mtg-tbody');
+  if(!tbody)return;
+  var today=new Date('2026-05-21');
+  var q=((document.getElementById('mtg-search')||{}).value||'').toLowerCase();
+  var total=MEETINGS_DATA.length;
+  var demos=MEETINGS_DATA.filter(function(m){return m.type==='Demo';}).length;
+  var onb=MEETINGS_DATA.filter(function(m){return m.type==='Onboarding';}).length;
+  var pend=MEETINGS_DATA.filter(function(m){return !_mtgDone[m.id];}).length;
+  var dn=MEETINGS_DATA.filter(function(m){return !!_mtgDone[m.id];}).length;
+  var kEl=document.getElementById('mtg-kpis');
+  if(kEl)kEl.innerHTML=[['Total Meetings',''+total,'all time','var(--teal)'],['Demos',''+demos,'deal opps','var(--blue)'],['Onboardings',''+onb,'customers','#7c3aed'],['Needs Follow-Up',''+pend,'pending','#d97706'],['Done',''+dn,'completed','#059669']].map(function(k){return '<div class="kpi"><div class="kpi-label">'+k[0]+'</div><div class="kpi-val" style="color:'+k[3]+'">'+k[1]+'</div><div class="kpi-sub">'+k[2]+'</div></div>';}).join('');
+  var filtered=MEETINGS_DATA.filter(function(m){
+    if(_mtgFilter==='pending')return !_mtgDone[m.id];
+    if(_mtgFilter==='done')return !!_mtgDone[m.id];
+    if(_mtgFilter!=='all'&&m.type!==_mtgFilter)return false;
+    if(q&&!m.company.toLowerCase().includes(q)&&!m.title.toLowerCase().includes(q))return false;
+    return true;
+  });
+  function tb(t){var c=t==='Demo'?'mt-demo':t==='Discussion'?'mt-disc':t==='Onboarding'?'mt-ob':'mt-part';return '<span class="mt-badge '+c+'">'+t+'</span>';}
+  function db(date){var d=new Date(date),n=Math.round((today-d)/86400000),c=n>30?'mt-hot':n>14?'mt-warm':n>7?'mt-mild':'mt-cool',l=n===0?'Today':n===1?'Yesterday':n+'d ago';return '<span class="mt-days '+c+'">'+l+'</span>';}
+  tbody.innerHTML=filtered.map(function(m){
+    var isDone=!!_mtgDone[m.id],d=new Date(m.date),ds=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'});
+    return '<tr>'
+      +'<td style="font-weight:600;color:var(--text);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+m.company+'">'+m.company+'</td>'
+      +'<td style="font-size:11px;color:var(--muted);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+m.title+'">'+m.title+'</td>'
+      +'<td>'+tb(m.type)+'</td>'
+      +'<td style="font-size:11px;white-space:nowrap">'+ds+'</td>'
+      +'<td>'+db(m.date)+'</td>'
+      +'<td><span class="fu-btn'+(isDone?' fu-done':'')+'" onclick="mtgToggleDone(\''+m.id+'\')">'+(isDone?'&#10003; Done':'&#8599; '+m.followup)+'</span></td>'
+      +'<td><a href="'+m.url+'" target="_blank" class="hs-link">&#8599;</a></td>'
+    +'</tr>';
+  }).join('')||'<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--dim)">No meetings found</td></tr>';
+  var foot=document.getElementById('mtg-footer');
+  if(foot){var p=filtered.filter(function(m){return !_mtgDone[m.id];}).length,dn2=filtered.filter(function(m){return !!_mtgDone[m.id];}).length;foot.innerHTML='<span>'+filtered.length+' meetings shown</span><span style="color:#d97706">&#9888; '+p+' need follow-up</span><span style="color:#059669">&#10003; '+dn2+' done</span>';}
 }
 
 
