@@ -671,7 +671,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
         <div id="vpf-ae-bars"></div>
       </div>
     </div>
-    <div class="tab-pane" id="tab-meetings" style="display:none">
+    <div class="tab-pane" id="tab-meetings" style="display:none" data-tab="meetings">
       <div style="padding:0">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
           <div>
@@ -1549,6 +1549,31 @@ function switchTab(tab,el){
 function setFilter(el,id){
   document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
   el.classList.add('active');activeFilter=id;renderCurrentTab();
+
+  // Force render meetings tab when it becomes visible
+  var mtgPane = document.getElementById('tab-meetings');
+  if(mtgPane && window.MutationObserver) {
+    var mtgObs = new MutationObserver(function(muts) {
+      muts.forEach(function(m) {
+        if(m.attributeName === 'style' && mtgPane.style.display !== 'none') {
+          setTimeout(renderMeetings, 50);
+        }
+      });
+    });
+    mtgObs.observe(mtgPane, {attributes: true, attributeFilter: ['style']});
+  }
+  // Force render vpforecast tab when it becomes visible
+  var vpPane = document.getElementById('tab-vpforecast');
+  if(vpPane && window.MutationObserver) {
+    var vpObs = new MutationObserver(function(muts) {
+      muts.forEach(function(m) {
+        if(m.attributeName === 'style' && vpPane.style.display !== 'none') {
+          setTimeout(doRenderVPF, 50);
+        }
+      });
+    });
+    vpObs.observe(vpPane, {attributes: true, attributeFilter: ['style']});
+  }
 }
 function renderCurrentTab(){
   // After render, re-apply user filter restrictions
