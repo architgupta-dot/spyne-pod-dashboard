@@ -281,18 +281,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
 .m-days-ok{background:#f9fafb;color:#6b7280}
 
 
-/* ── Meeting Intel ───────────────────────────── */
-.mt-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap;display:inline-block}
-.mt-demo{background:#e6f7f2;color:#0d9e75;border:1px solid #6ee7c7}
-.mt-disc{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe}
-.mt-ob{background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe}
-.mt-part{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa}
-.mt-days{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
-.mt-hot{background:#fef2f2;color:#dc2626}.mt-warm{background:#fff7ed;color:#c2410c}
-.mt-mild{background:#fffbeb;color:#d97706}.mt-cool{background:#f0fdf4;color:#059669}
-.fu-btn{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:7px;border:1.5px solid #fde68a;background:#fffbeb;color:#b45309;cursor:pointer;transition:all 0.12s;white-space:nowrap}
-.fu-btn:hover{background:#fef3c7;border-color:#f59e0b}
-.fu-btn.fu-done{background:#ecfdf5;border-color:#6ee7b7;color:#059669;text-decoration:line-through;opacity:0.75}
 </style>
 </head>
 <body>
@@ -358,8 +346,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>Forms &amp; Engagement</div>
     <div class="nav-item" onclick="switchTab('forecast',this)">
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M3 17l6-6 4 4 8-8"/></svg>Forecast</div>
-    <div class="nav-item" onclick="switchTab('meetings',this)">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" stroke-width="2"/><path stroke-width="2" d="M16 2v4M8 2v4M3 10h18"/></svg>Meeting Intel</div>
     <div class="nav-item" onclick="switchTab('vpforecast',this);setTimeout(doRenderVPF,100)">
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>VP Forecast</div>
     
@@ -671,37 +657,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
         <div id="vpf-ae-bars"></div>
       </div>
     </div>
-    <div class="tab-pane" id="tab-meetings" style="display:none">
-      <div style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
-        <div style="font-size:15px;font-weight:700;color:var(--text)">Meeting Intel <span style="font-size:11px;font-weight:400;color:var(--muted)">— Last 45 days from Google Calendar</span></div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="di-tab f-all active" onclick="setMtgFilter('all',this)">All</button>
-          <button class="di-tab" onclick="setMtgFilter('Demo',this)">Demo</button>
-          <button class="di-tab" onclick="setMtgFilter('Onboarding',this)">Onboarding</button>
-          <button class="di-tab" style="border-color:#f59e0b;color:#b45309" onclick="setMtgFilter('pending',this)">&#9888; Follow-Up</button>
-          <button class="di-tab" style="border-color:#6ee7b7;color:#059669" onclick="setMtgFilter('done',this)">&#10003; Done</button>
-          <input id="mtg-search" type="text" placeholder="Search..." style="padding:5px 10px;border:1px solid var(--border);border-radius:8px;font-size:11px;width:150px" oninput="renderMeetings()">
-        </div>
-      </div>
-      <div id="mtg-kpis" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px"></div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0;overflow:hidden">
-        <table style="width:100%;border-collapse:collapse;font-size:12px">
-          <thead>
-            <tr style="background:#fafafa">
-              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;border-bottom:2px solid var(--border);min-width:130px">Company</th>
-              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;border-bottom:2px solid var(--border);min-width:180px">Meeting</th>
-              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;border-bottom:2px solid var(--border)">Type</th>
-              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;border-bottom:2px solid var(--border)">Date</th>
-              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;border-bottom:2px solid var(--border)">Days Ago</th>
-              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;border-bottom:2px solid var(--border);min-width:200px">Follow-Up</th>
-              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;border-bottom:2px solid var(--border)">Link</th>
-            </tr>
-          </thead>
-          <tbody id="mtg-tbody" style="display:table-row-group"></tbody>
-        </table>
-        <div id="mtg-footer" style="padding:10px 14px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)"></div>
-      </div>
-    </div><div class="two-col"><div class="card"><div class="card-title">Closing May '26</div><div id="closing-month"></div></div><div class="card"><div class="card-title">Closing next 30 days</div><div id="closing-30d"></div></div></div><div class="card"><div class="card-title">Weighted pipeline</div><div id="forecast-list"></div></div></div>
+    <div class="two-col"><div class="card"><div class="card-title">Closing May '26</div><div id="closing-month"></div></div><div class="card"><div class="card-title">Closing next 30 days</div><div id="closing-30d"></div></div></div><div class="card"><div class="card-title">Weighted pipeline</div><div id="forecast-list"></div></div></div>
   </div>
 </div>
 
@@ -1529,12 +1485,11 @@ function switchTab(tab,el){
   var cEl=document.querySelector('.content'); if(cEl) cEl.scrollTop=0;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(el)el.classList.add('active');
-  const titles={summary:"Summary",pipeline:"Pipeline",leads:"Leads",stale:"Stale Accounts",inbound:"Inbound Leads",factors:"Factors AI Alerts",forecast:"Forecast",vpforecast:"VP Forecast Intelligence",meetings:"Meeting Intel",demostage:"Demo Stage",indiscussion:"In Discussion",futureprospect:"Future Prospect",closed:"Closed Accounts",engagements:"Forms & Engagement"};
+  const titles={summary:"Summary",pipeline:"Pipeline",leads:"Leads",stale:"Stale Accounts",inbound:"Inbound Leads",factors:"Factors AI Alerts",forecast:"Forecast",vpforecast:"VP Forecast Intelligence",demostage:"Demo Stage",indiscussion:"In Discussion",futureprospect:"Future Prospect",closed:"Closed Accounts",engagements:"Forms & Engagement"};
   document.getElementById('page-title').textContent=titles[tab]||tab;
   renderCurrentTab();
   setTimeout(function(){
     renderCurrentTab();
-    if(tab==='meetings') renderMeetings();
     if(tab==='vpforecast') doRenderVPF();
   }, 100);
 }
@@ -1542,18 +1497,7 @@ function setFilter(el,id){
   document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
   el.classList.add('active');activeFilter=id;renderCurrentTab();
 
-  // Force render meetings tab when it becomes visible
-  var mtgPane = document.getElementById('tab-meetings');
-  if(mtgPane && window.MutationObserver) {
-    var mtgObs = new MutationObserver(function(muts) {
-      muts.forEach(function(m) {
-        if(m.attributeName === 'style' && mtgPane.style.display !== 'none') {
-          setTimeout(renderMeetings, 50);
-        }
-      });
-    });
-    mtgObs.observe(mtgPane, {attributes: true, attributeFilter: ['style']});
-  }
+  
   // Force render vpforecast tab when it becomes visible
   var vpPane = document.getElementById('tab-vpforecast');
   if(vpPane && window.MutationObserver) {
@@ -1575,7 +1519,7 @@ function renderCurrentTab(){
     }, 10);
   }
 
-  const r={summary:renderSummary,pipeline:renderPipeline,leads:renderLeads,stale:renderStale,inbound:renderInboundLeads,factors:renderFactors,forecast:renderForecast,vpforecast:renderVPF,meetings:renderMeetings,demostage:renderDemoStage,indiscussion:renderInDiscussion,futureprospect:renderFutureProspect,closed:renderClosed,engagements:renderEngagements};
+  const r={summary:renderSummary,pipeline:renderPipeline,leads:renderLeads,stale:renderStale,inbound:renderInboundLeads,factors:renderFactors,forecast:renderForecast,vpforecast:renderVPF,demostage:renderDemoStage,indiscussion:renderInDiscussion,futureprospect:renderFutureProspect,closed:renderClosed,engagements:renderEngagements};
   if(r[currentTab]) { try { r[currentTab](); } catch(e) { console.error('RENDER ERROR tab='+currentTab, e.message, e.stack); } }
 }
 function dealRow(d,showProb=false){
@@ -2548,125 +2492,6 @@ function toggleFollowUp(id) {
 
 
 
-var MEETINGS_DATA=[
-  {id:"5glhv1ggn4jhia8beilm8a6ljp",title:"Kernersville Auto \u003C\u003E Spyne:- Followup Call",company:"Kernersville Auto",date:"2026-05-22",type:"Follow-up",followup:"Close the loop — send next steps",url:"https://www.google.com/calendar/event?eid=NWdsaHYxZ2duNGpoaWE4YmVpbG04YTZsanAgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"563d9g8pdjn81tl5vj8dic4ckr",title:"AW Auto Group X Spyne - Partnership",company:"AW Auto Group",date:"2026-05-22",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NTYzZDlnOHBkam44MXRsNXZqOGRpYzRja3IgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"1bea6niu490bo2o9oo1ln81qms",title:"Spyne X Graff Kia of Chesterton - Onboarding",company:"Graff Kia of Chesterton",date:"2026-05-22",type:"Onboarding",followup:"Check-in on go-live status",url:"https://www.google.com/calendar/event?eid=MWJlYTZuaXU0OTBibzJvOW9vMWxuODFxbXMgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"0iipedo3udjpgsat6lpnr9ca7s",title:"Spyne \u003C\u003E Kia (Ahmed)",company:"Kia",date:"2026-05-21",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MGlpcGVkbzN1ZGpwZ3NhdDZscG5yOWNhN3MgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"s6omppob8lmk0f4tq1hj6rojh8",title:"Spyne \u003C\u003E Curry Subaru Kingston (Mark)",company:"Curry Subaru Kingston",date:"2026-05-21",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=czZvbXBwb2I4bG1rMGY0dHExaGo2cm9qaDggYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"549dmq9jr159ft1drnbivtffn0",title:"Bravo Autos X Spyne - Partnership",company:"Bravo Autos",date:"2026-05-21",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NTQ5ZG1xOWpyMTU5ZnQxZHJuYml2dGZmbjAgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"1sbbpd8k591g5oekrjbkft6qo9",title:"Graff Auto Campus X Spyne - Onboarding",company:"Graff Auto Campus",date:"2026-05-21",type:"Onboarding",followup:"Check-in on go-live status",url:"https://www.google.com/calendar/event?eid=MXNiYnBkOGs1OTFnNW9la3JqYmtmdDZxbzkgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"0887vddabb1rt4i8fcf92chg14",title:"Rusty Wallis Honda X Spyne",company:"Rusty Wallis Honda",date:"2026-05-21",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MDg4N3ZkZGFiYjFydDRpOGZjZjkyY2hnMTQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"05js6142g3rltetcr1jjuv43pd",title:"Spyne Meeting\u003C\u003EGrant",company:"Meeting\u003C\u003EGrant",date:"2026-05-21",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MDVqczYxNDJnM3JsdGV0Y3Ixamp1djQzcGQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"201hia4j0vqafussehqm4eq5b8",title:"Spyne \u003C\u003E Surf N Auto",company:"Surf N Auto",date:"2026-05-21",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MjAxaGlhNGowdnFhZnVzc2VocW00ZXE1YjggYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"796pcaoijectu1j8ne9svb0lqk",title:"Scarboro Mazda X Spyne AI - Partnership",company:"Scarboro Mazda",date:"2026-05-21",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=Nzk2cGNhb2lqZWN0dTFqOG5lOXN2YjBscWsgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"4vacrnk43b73rjcq2v96llcvr4",title:"Dave Syverson \u003C\u003E Spyne: Business Review",company:"Dave Syverson",date:"2026-05-21",type:"Onboarding",followup:"Send recap + action items",url:"https://www.google.com/calendar/event?eid=NHZhY3JuazQzYjczcmpjcTJ2OTZsbGN2cjQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"0olaroeh1098herf4ok9bfvf1o",title:"Ralf \u003C\u003E Spyne",company:"Ralf",date:"2026-05-21",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MG9sYXJvZWgxMDk4aGVyZjRvazliZnZmMW8gYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"17725bdgahll57al99iou3o46p",title:"Spyne Connect\u003C\u003EDavid",company:"David",date:"2026-05-20",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MTc3MjViZGdhaGxsNTdhbDk5aW91M280NnAgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"5b27n14tmgt4ptlgm4psgok28n",title:"Vadim \u003C\u003E Spyne.ai",company:"Vadim",date:"2026-05-20",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NWIyN24xNHRtZ3Q0cHRsZ200cHNnb2syOG4gYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"523au70i492vt5bn38o3pphumn",title:"Over Drive :- OnBoarding Call",company:"Over Drive : Call",date:"2026-05-20",type:"Onboarding",followup:"Check-in on go-live status",url:"https://www.google.com/calendar/event?eid=NTIzYXU3MGk0OTJ2dDVibjM4bzNwcGh1bW4gYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"3krvjql3otvkcs2p1l4btlu0dt",title:"Curry Automotive X Spyne - Partnership",company:"Curry Automotive",date:"2026-05-20",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=M2tydmpxbDNvdHZrY3MycDFsNGJ0bHUwZHQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"4gurlt058md75nj0su9p2tg1as",title:"Cassidy\u003C\u003ESpyneAi",company:"Cassidy",date:"2026-05-20",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NGd1cmx0MDU4bWQ3NW5qMHN1OXAydGcxYXMgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"19e510o34aa934ksup25g57b42",title:"Quick Connect || Liberty Mitsubishi and Volkswagen \u003C\u003E Spyne",company:"Liberty Mitsubishi and Volkswagen",date:"2026-05-20",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MTllNTEwbzM0YWE5MzRrc3VwMjVnNTdiNDIgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"21l0htm0mnban2rgtuo9sq1bf0",title:"Cari \u003C\u003E Spyne",company:"Cari",date:"2026-05-20",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MjFsMGh0bTBtbmJhbjJyZ3R1bzlzcTFiZjAgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"2g170n1ln5bfm3qd7qir0emct8",title:"Kia Of Canton || Spyne",company:"Kia Of Canton",date:"2026-05-19",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MmcxNzBuMWxuNWJmbTNxZDdxaXIwZW1jdDggYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"7bv5it388jm8737tgo9kttmede",title:"Quick Connect || Advantage Chevrolet Of Hodgkins \u003C\u003E Spyne",company:"Advantage Chevrolet Of Hodgkins",date:"2026-05-19",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=N2J2NWl0Mzg4am04NzM3dGdvOWt0dG1lZGUgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"0bb51krje1fam8ji1j03bj572b",title:"Spyne Connect | North Park Lincoln",company:"North Park Lincoln",date:"2026-05-19",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MGJiNTFrcmplMWZhbThqaTFqMDNiajU3MmIgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"3qk74e1i4cjdrfq2bmfs3viars",title:"Spyne \u003C\u003E Overdrive(Slobodan)",company:"Overdrive",date:"2026-05-19",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=M3FrNzRlMWk0Y2pkcmZxMmJtZnMzdmlhcnMgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"277i2vj6eq2402qq5gv6dv7f7n",title:"Linda X Spyne - Follow Up",company:"Linda",date:"2026-05-19",type:"Follow-up",followup:"Close the loop — send next steps",url:"https://www.google.com/calendar/event?eid=Mjc3aTJ2ajZlcTI0MDJxcTVndjZkdjdmN24gYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"68jeovfkbkconuh7catveuqi2j",title:"Spyne x Lotus North Jersey | Vini AI agents",company:"Lotus North Jersey | Vini AI agents",date:"2026-05-18",type:"Demo",followup:"Send VINI proposal",url:"https://www.google.com/calendar/event?eid=NjhqZW92Zmtia2NvbnVoN2NhdHZldXFpMmogYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"75g2kg5b4oq9hb743s3k6hrgt3",title:"Sansone Route 1 Automall X Spyne",company:"Sansone Route 1 Automall",date:"2026-05-18",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NzVnMmtnNWI0b3E5aGI3NDNzM2s2aHJndDMgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"lvvjllqf5bg48dkrc7tid4k3as",title:"Liccardi x Spyne - Michelle and Maria",company:"Liccardi",date:"2026-05-16",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=bHZ2amxscWY1Ymc0OGRrcmM3dGlkNGszYXMgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"3p84llv2rsgkamv43vt1346j2a",title:"Kernersville || Spyne (Conversational AI)",company:"Kernersville",date:"2026-05-15",type:"Demo",followup:"Send VINI proposal",url:"https://www.google.com/calendar/event?eid=M3A4NGxsdjJyc2drYW12NDN2dDEzNDZqMmEgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"7kc4uoo0h05umvjsbha0clogva",title:"Spyne | Car Revolution",company:"Car Revolution",date:"2026-05-15",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=N2tjNHVvbzBoMDV1bXZqc2JoYTBjbG9ndmEgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"30pajoa7ntp4kv40n7k3iu7l63",title:"Spyne \u003C\u003E Southbank Dodge(Terry)",company:"Southbank Dodge",date:"2026-05-15",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MzBwYWpvYTdudHA0a3Y0MG43azNpdTdsNjMgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"7ovbob1o0d3b1havs7fdnp5sr4",title:"Bravo Autos X Spyne - Partnership",company:"Bravo Autos",date:"2026-05-14",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=N292Ym9iMW8wZDNiMWhhdnM3ZmRucDVzcjQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"729a1dhvk9s7bnmltjeg3i8rle",title:"Sansone Route 1 Automall || Spyne",company:"Sansone Route 1 Automall",date:"2026-05-14",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NzI5YTFkaHZrOXM3Ym5tbHRqZWczaThybGUgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"7r62uprun3h6lktrvqa0rajss8",title:"Linda X Spyne - Voice AI Demo",company:"Linda",date:"2026-05-14",type:"Demo",followup:"Send proposal",url:"https://www.google.com/calendar/event?eid=N3I2MnVwcnVuM2g2bGt0cnZxYTByYWpzczggYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"i9us7aunqac74mb9c00tpf7550",title:"Spyne \u003C\u003E United Jacksonville (Brad)",company:"United Jacksonville",date:"2026-05-13",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=aTl1czdhdW5xYWM3NG1iOWMwMHRwZjc1NTAgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"777lt2rufq9n4b2u5d8nki1tr4",title:"Steve White Auto Group \u003C\u003E Spyne",company:"Steve White Auto Group",date:"2026-05-13",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=Nzc3bHQycnVmcTluNGIydTVkOG5raTF0cjQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"28416ntrcqm9ocdhcult9l06et",title:"Toronto Honda X Spyne - Onboarding",company:"Toronto Honda",date:"2026-05-13",type:"Onboarding",followup:"Check-in on go-live status",url:"https://www.google.com/calendar/event?eid=Mjg0MTZudHJjcW05b2NkaGN1bHQ5bDA2ZXQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"1e0m151dkoji6hoff471uolpq1",title:"Lockwood Motors X Spyne.ai",company:"Lockwood Motors",date:"2026-05-12",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MWUwbTE1MWRrb2ppNmhvZmY0NzF1b2xwcTEgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"bv8opu7vtinfpbtpr5cd3dt70o",title:"Stephan Lee(Scarboro mazda)\u003C\u003ESpyne Ai",company:"Stephan Lee",date:"2026-05-12",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=YnY4b3B1N3Z0aW5mcGJ0cHI1Y2QzZHQ3MG8gYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"7tiifla2bop8onkmn03nbgnnra",title:"Spyne || Vatland Auto Group - Sales AI Test",company:"Vatland Auto Group",date:"2026-05-12",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=N3RpaWZsYTJib3A4b25rbW4wM25iZ25ucmEgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"4v35nornv337ccnt9u3agv39sf",title:"Brown - Daub X Spyne",company:"Brown - Daub",date:"2026-05-12",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NHYzNW5vcm52MzM3Y2NudDl1M2FndjM5c2YgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"gn2e7rftikpfuje1fs2kbc87t0",title:"Rick Weaver Group X Onboarding",company:"Rick Weaver Group X Onboarding",date:"2026-05-11",type:"Onboarding",followup:"Check-in on go-live status",url:"https://www.google.com/calendar/event?eid=Z24yZTdyZnRpa3BmdWplMWZzMmtiYzg3dDAgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"6r7r3o5uatm58qkkd14tpql6jn",title:"Onboarding Session\u003C\u003EARIANA MOTORS",company:"Onboarding Session\u003C\u003EARIANA MOTORS",date:"2026-05-11",type:"Onboarding",followup:"Check-in on go-live status",url:"https://www.google.com/calendar/event?eid=NnI3cjNvNXVhdG01OHFra2QxNHRwcWw2am4gYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"2hevl2fd7dql48kls4q10brs37",title:"Vinni Demo\u003C\u003EGeorgia Auto World",company:"Vinni Demo\u003C\u003EGeorgia Auto World",date:"2026-05-11",type:"Demo",followup:"Send proposal",url:"https://www.google.com/calendar/event?eid=MmhldmwyZmQ3ZHFsNDhrbHM0cTEwYnJzMzcgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"5hcl9d04pmj2pio4a8u9sgkbbm",title:"Bravo Autos || Spyne",company:"Bravo Autos",date:"2026-05-11",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NWhjbDlkMDRwbWoycGlvNGE4dTlzZ2tiYm0gYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"664a79a24j64rnokggqoralouq",title:"Quick Connect || Metro Ford \u003C\u003E Spyne",company:"Metro Ford",date:"2026-05-09",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NjY0YTc5YTI0ajY0cm5va2dncW9yYWxvdXEgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"24si4sn39mqdjl2gs1qgg73kaa",title:"Kemna Family Dealerships || Spyne (Conversational AI)",company:"Kemna Family Dealerships",date:"2026-05-08",type:"Demo",followup:"Send VINI proposal",url:"https://www.google.com/calendar/event?eid=MjRzaTRzbjM5bXFkamwyZ3MxcWdnNzNrYWEgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"5632jk0fjfbhbhg41d92d9jlet",title:"Spyne X North Park Lincoln - Demo Voice AI Agent",company:"North Park Lincoln Voice AI Agent",date:"2026-05-08",type:"Demo",followup:"Send proposal",url:"https://www.google.com/calendar/event?eid=NTYzMmprMGZqZmJoYmhnNDFkOTJkOWpsZXQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"7f19cpauvm9k2foft2ge72og1u",title:"Spyne || Highline Motors - Sales AI",company:"Highline Motors",date:"2026-05-08",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=N2YxOWNwYXV2bTlrMmZvZnQyZ2U3Mm9nMXUgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"2560inupmjm468fet9kratkf04",title:"Toyota Place X Spyne.ai",company:"Toyota Place",date:"2026-05-08",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MjU2MGludXBtam00NjhmZXQ5a3JhdGtmMDQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"61km8u8u9034g6fhcukca2cr0t",title:"Price Ford of Simi Valley x Spyne",company:"Price Ford of Simi Valley",date:"2026-05-08",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NjFrbTh1OHU5MDM0ZzZmaGN1a2NhMmNyMHQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"58fh21o8ficqc3srvqkb5r1mc6",title:"Followup:- Alpena Buick GMC || Spyne",company:"Followup",date:"2026-05-07",type:"Follow-up",followup:"Close the loop — send next steps",url:"https://www.google.com/calendar/event?eid=NThmaDIxbzhmaWNxYzNzcnZxa2I1cjFtYzYgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"2pi83qf9403bolv62hc4s7game",title:"Nissan of Omaha || Spyne VINI(Conversational AI)",company:"Nissan of Omaha",date:"2026-05-07",type:"Demo",followup:"Send VINI proposal",url:"https://www.google.com/calendar/event?eid=MnBpODNxZjk0MDNib2x2NjJoYzRzN2dhbWUgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"49sdmsjt9a54hj39h60qmf5nj4",title:"Spyne X North Park Lincoln - Onboarding",company:"North Park Lincoln",date:"2026-05-06",type:"Onboarding",followup:"Check-in on go-live status",url:"https://www.google.com/calendar/event?eid=NDlzZG1zanQ5YTU0aGozOWg2MHFtZjVuajQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"6pub9fbtrj2hl6ded28fse0vsn",title:"Alpena Buick GMC || Spyne (Conversational AI)",company:"Alpena Buick GMC",date:"2026-05-06",type:"Demo",followup:"Send VINI proposal",url:"https://www.google.com/calendar/event?eid=NnB1YjlmYnRyajJobDZkZWQyOGZzZTB2c24gYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"220d2pme8vil1mmu6fjhslr0lq",title:"Spyne Product Walkthrough",company:"Product Walkthrough",date:"2026-05-06",type:"Demo",followup:"Send proposal",url:"https://www.google.com/calendar/event?eid=MjIwZDJwbWU4dmlsMW1tdTZmamhzbHIwbHEgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"5o7pmnuotgfgnochec3t1ri89e",title:"Rosedale Chevrolet X Spyne",company:"Rosedale Chevrolet",date:"2026-05-06",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NW83cG1udW90Z2Znbm9jaGVjM3Qxcmk4OWUgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"53g1al4irnuiu78blrg74gnsil",title:"Brown - Daub X Spyne",company:"Brown - Daub",date:"2026-05-06",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NTNnMWFsNGlybnVpdTc4YmxyZzc0Z25zaWwgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"d0e7bnne8die8n8qs8c2jd4m3c",title:"Spyne \u003C\u003E North Park Lincoln (Reagan)",company:"North Park Lincoln",date:"2026-05-05",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=ZDBlN2JubmU4ZGllOG44cXM4YzJqZDRtM2MgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"19klj77pl3lmui3ubc3al2oete",title:"Spyne | Jim Marsh Auto",company:"Jim Marsh Auto",date:"2026-05-05",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MTlrbGo3N3BsM2xtdWkzdWJjM2FsMm9ldGUgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"808gh0oor9j8itd40oj317j3qk",title:"Spyne \u003C\u003E Palladin Honda (Lee)",company:"Palladin Honda",date:"2026-05-04",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=ODA4Z2gwb29yOWo4aXRkNDBvajMxN2ozcWsgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"2ok61llfo5lt6kjcab0aj47867",title:"Spyne | Drive Car Lux",company:"Drive Car Lux",date:"2026-05-04",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=Mm9rNjFsbGZvNWx0NmtqY2FiMGFqNDc4NjcgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"7npmqdqrmnj4e35quhc8epn1ts",title:"Amigo Chevrolet X Spyne - Partnership",company:"Amigo Chevrolet",date:"2026-05-01",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=N25wbXFkcXJtbmo0ZTM1cXVoYzhlcG4xdHMgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"6td0s3vtfc84hb6kvucqb182s4",title:"Brown-Daub Chevrolet X Spyne",company:"Brown-Daub Chevrolet",date:"2026-05-01",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NnRkMHMzdnRmYzg0aGI2a3Z1Y3FiMTgyczQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"49iqhf19rql0ve00g6n9csfd4g",title:"Spyne App Training Connect | Dorsett Automotive Group",company:"App Training Connect | Dorsett Automotive Group",date:"2026-05-01",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NDlpcWhmMTlycWwwdmUwMGc2bjljc2ZkNGcgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"i9b6s65ojmgof7tvf4cjtj3js4",title:"Spyne \u003C\u003E Kemna Chevrolet of Fort Dodge(Bob)",company:"Kemna Chevrolet of Fort Dodge",date:"2026-05-01",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=aTliNnM2NW9qbWdvZjd0dmY0Y2p0ajNqczQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"2mh9p7eo8ioj11bfqb460o9tsp",title:"Spyne | Malone Ford",company:"Malone Ford",date:"2026-04-30",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=Mm1oOXA3ZW84aW9qMTFiZnFiNDYwbzl0c3AgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"4t12nhsrfjd0ijc890te6avvq0",title:"Vatland Automotive Group X Spyne - Onboarding",company:"Vatland Automotive Group",date:"2026-04-30",type:"Onboarding",followup:"Check-in on go-live status",url:"https://www.google.com/calendar/event?eid=NHQxMm5oc3JmamQwaWpjODkwdGU2YXZ2cTAgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"5u921a4kc7ple43bqqiu04fe3p",title:"Brown - Daub X Spyne",company:"Brown - Daub",date:"2026-04-30",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NXU5MjFhNGtjN3BsZTQzYnFxaXUwNGZlM3AgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"0s42ihbot5bgjosaqovbhcuch4",title:"Spyne Ai (Voice Agents ) Services",company:"Ai (Voice Agents ) Services",date:"2026-04-29",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MHM0MmloYm90NWJnam9zYXFvdmJoY3VjaDQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"4hbcrtg4ldba496j6b88vmm6s5",title:"Linda X Spyne - Voice AI Demo",company:"Linda",date:"2026-04-29",type:"Demo",followup:"Send proposal",url:"https://www.google.com/calendar/event?eid=NGhiY3J0ZzRsZGJhNDk2ajZiODh2bW02czUgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"4he7j5gec8rvsr6tgk8jeque3k",title:"Spyne | Principle Auto",company:"Principle Auto",date:"2026-04-29",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NGhlN2o1Z2VjOHJ2c3I2dGdrOGplcXVlM2sgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"f7pjhe3k4lalr8s7guriia3p4g",title:"Vatland Automotive Group || Spyne (Conversational AI)",company:"Vatland Automotive Group",date:"2026-04-29",type:"Demo",followup:"Send VINI proposal",url:"https://www.google.com/calendar/event?eid=ZjdwamhlM2s0bGFscjhzN2d1cmlpYTNwNGcgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"3fj9cf69b716e2sl9ud4kt45f6",title:"Highline Motors X Spyne - Voice AI Onboarding",company:"Highline Motors",date:"2026-04-29",type:"Onboarding",followup:"Check-in on go-live status",url:"https://www.google.com/calendar/event?eid=M2ZqOWNmNjliNzE2ZTJzbDl1ZDRrdDQ1ZjYgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"6p6vqq0cski7gu86gnre0t9p94",title:"Spyne Product Walkthrough",company:"Product Walkthrough",date:"2026-04-29",type:"Demo",followup:"Send proposal",url:"https://www.google.com/calendar/event?eid=NnA2dnFxMGNza2k3Z3U4NmducmUwdDlwOTQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"7645jos4jf9inv0ert3s5m7261",title:"Highline Motors X Spyne - Voice AI Agent",company:"Highline Motors",date:"2026-04-28",type:"Demo",followup:"Send VINI proposal",url:"https://www.google.com/calendar/event?eid=NzY0NWpvczRqZjlpbnYwZXJ0M3M1bTcyNjEgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"7is0abcckgclu9hc52hhf0cca4",title:"Shea Automotive Group \u003C\u003E Spyne",company:"Shea Automotive Group",date:"2026-04-28",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=N2lzMGFiY2NrZ2NsdTloYzUyaGhmMGNjYTQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"7je6kr164jt6iu19oovlcjtjqq",title:"Vatland Automotive Group || Spyne (Conversational AI)",company:"Vatland Automotive Group",date:"2026-04-28",type:"Demo",followup:"Send VINI proposal",url:"https://www.google.com/calendar/event?eid=N2plNmtyMTY0anQ2aXUxOW9vdmxjanRqcXEgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"2fetdrdot17ru1tqnurb5u061f",title:"Spyne X Rick Weaver Auto Group - Partnership",company:"Rick Weaver Auto Group",date:"2026-04-28",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MmZldGRyZG90MTdydTF0cW51cmI1dTA2MWYgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"2kbapl4gt6rd0bscvjtj4ut5a3",title:"Airport Marina Ford X Spyne.ai",company:"Airport Marina Ford",date:"2026-04-28",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MmtiYXBsNGd0NnJkMGJzY3ZqdGo0dXQ1YTMgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"3d0161vjuifckunhgmudth8lp2",title:"Mountain West Auto X Spyne - Final Discussion",company:"Mountain West Auto",date:"2026-04-28",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=M2QwMTYxdmp1aWZja3VuaGdtdWR0aDhscDIgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"3c2dphrk1uhl499vf4k8gbqunp",title:"Beck Ford || Spyne(Conversational AI)",company:"Beck Ford",date:"2026-04-28",type:"Demo",followup:"Send VINI proposal",url:"https://www.google.com/calendar/event?eid=M2MyZHBocmsxdWhsNDk5dmY0azhnYnF1bnAgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"3ht8rk9soolravsu7vtrmqt8oi",title:"Spyne x Secret City | Monday sync-up",company:"Secret City",date:"2026-04-27",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=M2h0OHJrOXNvb2xyYXZzdTd2dHJtcXQ4b2kgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"6amenbeedfqd3266mhq6ujvps5",title:"Expansion Discussion \u003C\u003E DFW Auto Sales",company:"Expansion Discussion \u003C\u003E DFW Auto Sales",date:"2026-04-27",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NmFtZW5iZWVkZnFkMzI2Nm1ocTZ1anZwczUgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"6kucp0ho69gfugml5kj147r7qk",title:"Graff Chevrolet of Chesterton X Spyne - Onboarding",company:"Graff Chevrolet of Chesterton",date:"2026-04-24",type:"Onboarding",followup:"Check-in on go-live status",url:"https://www.google.com/calendar/event?eid=Nmt1Y3AwaG82OWdmdWdtbDVrajE0N3I3cWsgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"22dpn6pi9gh5ujq3bjr2ucnl2f",title:"Brown - Daub X Spyne",company:"Brown - Daub",date:"2026-04-23",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MjJkcG42cGk5Z2g1dWpxM2JqcjJ1Y25sMmYgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"230qaf17amt60utomj39gbjncj",title:"Toronto Honda X Spyne - Partnership",company:"Toronto Honda",date:"2026-04-22",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MjMwcWFmMTdhbXQ2MHV0b21qMzlnYmpuY2ogYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"4ssnbf2j9kntcktrrd3pa7a53n",title:"EBD Grupo.com.br:- Studio \u003C\u003E Followup",company:"EBD Grupo.com.br",date:"2026-04-22",type:"Follow-up",followup:"Close the loop — send next steps",url:"https://www.google.com/calendar/event?eid=NHNzbmJmMmo5a250Y2t0cnJkM3BhN2E1M24gYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"1iglscuchljrgo7sprnbfjnnng",title:"Cape Girardeau Honda X Spyne.ai",company:"Cape Girardeau Honda",date:"2026-04-22",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MWlnbHNjdWNobGpyZ283c3BybmJmam5ubmcgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"6ede32mp61uvuhaps8ivu5ifkt",title:"Brown - Daub X Spyne",company:"Brown - Daub",date:"2026-04-22",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NmVkZTMybXA2MXV2dWhhcHM4aXZ1NWlma3QgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"2hh21haum41v0204v4oeu6rndj",title:"AutoGiant USA \u003C\u003E Spyne Image Deletion Discussion",company:"AutoGiant USA",date:"2026-04-21",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MmhoMjFoYXVtNDF2MDIwNHY0b2V1NnJuZGogYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"6itornfma8kj2qbu90jv54uivc",title:"Ideal Cars X Spyne - Onboarding",company:"Ideal Cars",date:"2026-04-21",type:"Onboarding",followup:"Check-in on go-live status",url:"https://www.google.com/calendar/event?eid=Nml0b3JuZm1hOGtqMnFidTkwanY1NHVpdmMgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"3vd4247q2f19j8m4qrd61anj8g",title:"Vini Followup :- O.C. Welch Ford Lincoln",company:"Vini Followup",date:"2026-04-21",type:"Follow-up",followup:"Close the loop — send next steps",url:"https://www.google.com/calendar/event?eid=M3ZkNDI0N3EyZjE5ajhtNHFyZDYxYW5qOGcgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"4bah1rd6lukftrviqne7ptgbg5",title:"Spyne Connect | McLaren North Jersey Team",company:"McLaren North Jersey Team",date:"2026-04-21",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NGJhaDFyZDZsdWtmdHJ2aXFuZTdwdGdiZzUgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"1o1s81prar0rds87hjdllog41m",title:"Ocean Automotive Group \u003C\u003E Spyne",company:"Ocean Automotive Group",date:"2026-04-20",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MW8xczgxcHJhcjByZHM4N2hqZGxsb2c0MW0gYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"58n1cqmis1gs1hde643fft6gif",title:"Laurie X Spyne - Voice AI",company:"Laurie",date:"2026-04-17",type:"Demo",followup:"Send VINI proposal",url:"https://www.google.com/calendar/event?eid=NThuMWNxbWlzMWdzMWhkZTY0M2ZmdDZnaWYgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"06vfjt28enf72i1igufk1aupte",title:"Vini Followup :- O.C. Welch Ford Lincoln",company:"Vini Followup",date:"2026-04-17",type:"Follow-up",followup:"Close the loop — send next steps",url:"https://www.google.com/calendar/event?eid=MDZ2Zmp0MjhlbmY3MmkxaWd1ZmsxYXVwdGUgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"5t749re0sv9veo8feafriflcvs",title:"Spyne \u003C\u003E Graham Automotive",company:"Graham Automotive",date:"2026-04-16",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NXQ3NDlyZTBzdjl2ZW84ZmVhZnJpZmxjdnMgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"5heg7oes63l5eec9ifhqmnprtp",title:"Spyne Connect",company:"",date:"2026-04-16",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NWhlZzdvZXM2M2w1ZWVjOWlmaHFtbnBydHAgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"5f7bj540oegqvf9tb37mijg3qn",title:"Follow-up:- AI Calling Solution ||  Trust Auto \u003C\u003E Spyne.ai",company:"Follow-up",date:"2026-04-16",type:"Follow-up",followup:"Close the loop — send next steps",url:"https://www.google.com/calendar/event?eid=NWY3Ymo1NDBvZWdxdmY5dGIzN21pamczcW4gYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"14fjcu8477r5sier0sen0likrb",title:"Spyne \u003C\u003E Burke Motors",company:"Burke Motors",date:"2026-04-15",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MTRmamN1ODQ3N3I1c2llcjBzZW4wbGlrcmIgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"2oiteecl8thfcg6l34td0vuokt",title:"Schmidt Auto || Spyne (Conversational AI)",company:"Schmidt Auto",date:"2026-04-14",type:"Demo",followup:"Send VINI proposal",url:"https://www.google.com/calendar/event?eid=Mm9pdGVlY2w4dGhmY2c2bDM0dGQwdnVva3QgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"7k7akq4orp4460c0th5k0rf272",title:"Team Chevrolet \u003C\u003E Spyne",company:"Team Chevrolet",date:"2026-04-14",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=N2s3YWtxNG9ycDQ0NjBjMHRoNWswcmYyNzIgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"3gnr17m6a5kjpbn45uf85bokn1",title:"O.C. Welch Ford Lincoln \u003C\u003E Spyne",company:"O.C. Welch Ford Lincoln",date:"2026-04-14",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=M2ducjE3bTZhNWtqcGJuNDV1Zjg1Ym9rbjEgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"47rcucvrmcncpkap4arbjvbbtd",title:"Spyne \u003C\u003E Quirk Auto Group Maine",company:"Quirk Auto Group Maine",date:"2026-04-14",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NDdyY3VjdnJtY25jcGthcDRhcmJqdmJidGQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"j3d66qq45j9j9vtp3d530qtd84",title:"Studio Solution Issue:- Greater Chicago Motor",company:"Studio Solution Issue",date:"2026-04-13",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=ajNkNjZxcTQ1ajlqOXZ0cDNkNTMwcXRkODQgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"0l3ai57aa8ip3ers3hgi7bnqok",title:"Schepel Auto Group X Spyne.ai",company:"Schepel Auto Group",date:"2026-04-10",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=MGwzYWk1N2FhOGlwM2VyczNoZ2k3Ym5xb2sgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"4sq5t84ehu5p8eh72n4tceu3ub",title:"O.C. Welch Ford Lincoln \u003C\u003E Spyne",company:"O.C. Welch Ford Lincoln",date:"2026-04-10",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NHNxNXQ4NGVodTVwOGVoNzJuNHRjZXUzdWIgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"561u0g0590burrij5fd3eb88fe",title:"Nissan of Fort Pierce || Spyne",company:"Nissan of Fort Pierce",date:"2026-04-10",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NTYxdTBnMDU5MGJ1cnJpajVmZDNlYjg4ZmUgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"40pqdldu8qvjkucj6ousemslrv",title:"Toronto Honda X Spyne - Partnership",company:"Toronto Honda",date:"2026-04-10",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NDBwcWRsZHU4cXZqa3VjajZvdXNlbXNscnYgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"3hed24kqi4qtt5vb2fukbjhpcr",title:"Spyne | Principle Auto",company:"Principle Auto",date:"2026-04-09",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=M2hlZDI0a3FpNHF0dDV2YjJmdWtiamhwY3IgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"61gveapnpp3ve1jb494dd6u589",title:"Spyne Ai (Agent) - Pricing",company:"Ai (Agent) - Pricing",date:"2026-04-09",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NjFndmVhcG5wcDN2ZTFqYjQ5NGRkNnU1ODkgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"76gc6sfjqptio9gm7nahjkshv7",title:"Curtis Auto Group X Spyne.ai",company:"Curtis Auto Group",date:"2026-04-08",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NzZnYzZzZmpxcHRpbzlnbTduYWhqa3NodjcgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"05dhf5dqngnrt2ui30or2i9o0u",title:"Trust Auto || Spyne (Conversational AI)",company:"Trust Auto",date:"2026-04-08",type:"Demo",followup:"Send VINI proposal",url:"https://www.google.com/calendar/event?eid=MDVkaGY1ZHFuZ25ydDJ1aTMwb3IyaTlvMHUgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"33gs3p7h88ndc7ln7niolg0nmk",title:"Secret City CDJR x Spyne | AI Agents for sales and service",company:"Secret City CDJR",date:"2026-04-07",type:"Demo",followup:"Send VINI proposal",url:"https://www.google.com/calendar/event?eid=MzNnczNwN2g4OG5kYzdsbjduaW9sZzBubWsgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"6284fmhroiiute7u7jqia781g5",title:"Kayla \u003C\u003E Spyne AI Voice Agents",company:"Kayla",date:"2026-04-07",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NjI4NGZtaHJvaWl1dGU3dTdqcWlhNzgxZzUgYXJjaGl0Lmd1cHRhQHNweW5lLmFp"},
-  {id:"5oepjlmd3dml11o21hgkna2e9h",title:"Airport Marina Honda X Spyne.ai",company:"Airport Marina Honda",date:"2026-04-07",type:"Meeting",followup:"Follow up on next steps",url:"https://www.google.com/calendar/event?eid=NW9lcGpsbWQzZG1sMTFvMjFoZ2tuYTJlOWggYXJjaGl0Lmd1cHRhQHNweW5lLmFp"}
-];
 
 
 
@@ -2676,134 +2501,12 @@ var MEETINGS_DATA=[
 
 
 
-function downloadMeetingsCSV() {
-  if(typeof MEETINGS_DATA === 'undefined' || !MEETINGS_DATA.length) return;
-  var today = new Date('2026-05-22');
-
-  // Apply current filter
-  var filtered = MEETINGS_DATA.filter(function(m) {
-    if(_mtgFilter === 'pending') return !_mtgDone[m.id];
-    if(_mtgFilter === 'done') return !!_mtgDone[m.id];
-    if(_mtgFilter !== 'all' && m.type !== _mtgFilter) return false;
-    var q = ((document.getElementById('mtg-search')||{}).value||'').toLowerCase();
-    if(q && !m.company.toLowerCase().includes(q) && !m.title.toLowerCase().includes(q)) return false;
-    return true;
-  });
-
-  var headers = ['Company','Meeting Title','Type','Date','Days Ago','Follow-Up Action','Status','Calendar Link'];
-  var rows = filtered.map(function(m) {
-    var d = new Date(m.date);
-    var days = Math.round((today - d) / 86400000);
-    var daysLabel = days === 0 ? 'Today' : days === 1 ? 'Yesterday' : days + 'd ago';
-    var status = _mtgDone[m.id] ? 'Done' : 'Pending';
-    var followup = _mtgDone[m.id] ? 'Done' : m.followup;
-    return [
-      '"' + (m.company||'').replace(/"/g,'""') + '"',
-      '"' + (m.title||'').replace(/"/g,'""') + '"',
-      '"' + (m.type||'') + '"',
-      '"' + (m.date||'') + '"',
-      '"' + daysLabel + '"',
-      '"' + followup.replace(/"/g,'""') + '"',
-      '"' + status + '"',
-      '"' + (m.url||'') + '"'
-    ].join(',');
-  });
-
-  var csv = headers.join(',') + '\n' + rows.join('\n');
-  var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = 'spyne_meetings_' + new Date().toISOString().slice(0,10) + '.csv';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
 
 
 
-var _mtgFilter='all';
-var _mtgDone={};
 
-function setMtgFilter(f,el){
-  _mtgFilter=f;
-  var btns=document.querySelectorAll('#mtg-filters .di-tab');
-  for(var i=0;i<btns.length;i++) btns[i].classList.remove('active');
-  if(el) el.classList.add('active');
-  renderMeetings();
-}
 
-function mtgToggleDone(id){
-  _mtgDone[id]=!_mtgDone[id];
-  renderMeetings();
-}
 
-function renderMeetings(){
-  var tbody=document.getElementById('mtg-tbody');
-  if(!tbody) return;
-  if(typeof MEETINGS_DATA==='undefined'||!MEETINGS_DATA.length){
-    tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">No meetings data</td></tr>';
-    return;
-  }
-  var today=new Date('2026-05-22');
-  var q=document.getElementById('mtg-search')?document.getElementById('mtg-search').value.toLowerCase():'';
-  var total=MEETINGS_DATA.length;
-  var demos=0,onbs=0,pend=0,dn=0;
-  for(var i=0;i<MEETINGS_DATA.length;i++){
-    var m=MEETINGS_DATA[i];
-    if(m.type==='Demo') demos++;
-    if(m.type==='Onboarding') onbs++;
-    if(_mtgDone[m.id]) dn++; else pend++;
-  }
-  var kEl=document.getElementById('mtg-kpis');
-  if(kEl) kEl.innerHTML=
-    '<div class="kpi"><div class="kpi-label">Total</div><div class="kpi-val" style="color:var(--teal)">'+total+'</div><div class="kpi-sub">meetings</div></div>'+
-    '<div class="kpi"><div class="kpi-label">Demos</div><div class="kpi-val" style="color:#2563eb">'+demos+'</div><div class="kpi-sub">deal opps</div></div>'+
-    '<div class="kpi"><div class="kpi-label">Onboardings</div><div class="kpi-val" style="color:#7c3aed">'+onbs+'</div><div class="kpi-sub">customers</div></div>'+
-    '<div class="kpi"><div class="kpi-label">Needs Follow-Up</div><div class="kpi-val" style="color:#d97706">'+pend+'</div><div class="kpi-sub">pending</div></div>'+
-    '<div class="kpi"><div class="kpi-label">Done</div><div class="kpi-val" style="color:#059669">'+dn+'</div><div class="kpi-sub">completed</div></div>';
-  var filtered=[];
-  for(var i=0;i<MEETINGS_DATA.length;i++){
-    var m=MEETINGS_DATA[i];
-    if(_mtgFilter==='pending'&&_mtgDone[m.id]) continue;
-    if(_mtgFilter==='done'&&!_mtgDone[m.id]) continue;
-    if(_mtgFilter!=='all'&&_mtgFilter!=='pending'&&_mtgFilter!=='done'&&m.type!==_mtgFilter) continue;
-    if(q&&m.company.toLowerCase().indexOf(q)===-1&&m.title.toLowerCase().indexOf(q)===-1) continue;
-    filtered.push(m);
-  }
-  var rows='';
-  for(var i=0;i<filtered.length;i++){
-    var m=filtered[i];
-    var d=new Date(m.date);
-    var days=Math.round((today-d)/86400000);
-    var dLabel=days===0?'Today':days===1?'Yesterday':days+'d ago';
-    var dCls=days>30?'mt-hot':days>14?'mt-warm':days>7?'mt-mild':'mt-cool';
-    var tCls=m.type==='Demo'?'mt-demo':m.type==='Discussion'?'mt-disc':m.type==='Onboarding'?'mt-ob':'mt-part';
-    var ds=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'});
-    var isDone=!!_mtgDone[m.id];
-    var fuTxt=isDone?'&#10003; Done':'&#8599; '+m.followup;
-    var fuCls=isDone?'fu-btn fu-done':'fu-btn';
-    rows+='<tr>'
-      +'<td style="font-weight:600;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+m.company+'">'+m.company+'</td>'
-      +'<td style="font-size:11px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+m.title+'">'+m.title+'</td>'
-      +'<td><span class="mt-badge '+tCls+'">'+m.type+'</span></td>'
-      +'<td style="font-size:11px;white-space:nowrap">'+ds+'</td>'
-      +'<td><span class="mt-days '+dCls+'">'+dLabel+'</span></td>'
-      +'<td><span class="'+fuCls+'" onclick="mtgToggleDone(\''+m.id+'\')">'+fuTxt+'</span></td>'
-      +'<td><a href="'+m.url+'" target="_blank" class="hs-link">&#8599;</a></td>'
-      +'</tr>';
-  }
-  tbody.innerHTML=rows||'<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">No meetings found</td></tr>';
-  var foot=document.getElementById('mtg-footer');
-  if(foot){
-    var fp=filtered.filter(function(m){return !_mtgDone[m.id];}).length;
-    var fd=filtered.filter(function(m){return !!_mtgDone[m.id];}).length;
-    foot.innerHTML='<span>'+filtered.length+' meetings</span><span style="color:#d97706">&#9888; '+fp+' pending</span><span style="color:#059669">&#10003; '+fd+' done</span>';
-  }
-  var s=document.getElementById('mtg-search');
-  if(s&&!s._bound){s._bound=true;s.addEventListener('input',renderMeetings);}
-}
 
 
 </script>
