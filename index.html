@@ -360,7 +360,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M3 17l6-6 4 4 8-8"/></svg>Forecast</div>
     <div class="nav-item" onclick="switchTab('meetings',this)">
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" stroke-width="2"/><path stroke-width="2" d="M16 2v4M8 2v4M3 10h18"/></svg>Meeting Intel</div>
-    <div class="nav-item" onclick="switchTab('vpforecast',this)">
+    <div class="nav-item" onclick="switchTab('vpforecast',this);setTimeout(doRenderVPF,100)">
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>VP Forecast</div>
     
   </div>
@@ -638,7 +638,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
           </select>
         </div>
       </div>
-      <div id="vpf-kpi-row" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px"></div>
+      <div id="vpf-kpi-row" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px"><div class="kpi" style="grid-column:1/-1;text-align:center;color:var(--muted);font-size:12px">Loading...</div></div>
       <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap">
         <button class="vpf-btn active" id="vpfb-all" onclick="setVPFB('all',this)">All Deals</button>
         <button class="vpf-btn b0" id="vpfb-0" onclick="setVPFB('0',this)">0–30% <span id="vpfn-0" style="font-size:10px;margin-left:2px"></span></button>
@@ -670,13 +670,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
         <div class="card-title">Probability-Weighted Pipeline by AE</div>
         <div id="vpf-ae-bars"></div>
       </div>
-    </div><div class="two-col"><div class="card"><div class="card-title">Closing May '26</div><div id="closing-month"></div></div><div class="card"><div class="card-title">Closing next 30 days</div><div id="closing-30d"></div></div></div><div class="card"><div class="card-title">Weighted pipeline</div><div id="forecast-list"></div></div></div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-
+    </div>
     <div class="tab-pane" id="tab-meetings" style="display:none">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
         <div>
@@ -715,7 +709,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
         </div>
         <div id="mtg-footer" style="padding:10px 16px;border-top:1px solid var(--border);background:var(--hover);font-size:11px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap"></div>
       </div>
-    </div>
+    </div><div class="two-col"><div class="card"><div class="card-title">Closing May '26</div><div id="closing-month"></div></div><div class="card"><div class="card-title">Closing next 30 days</div><div id="closing-30d"></div></div></div><div class="card"><div class="card-title">Weighted pipeline</div><div id="forecast-list"></div></div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 
     
 
@@ -1535,11 +1534,13 @@ function switchTab(tab,el){
   currentTab=tab;
   document.querySelectorAll('.tab-pane').forEach(p=>p.style.display='none');
   const tabEl=document.getElementById('tab-'+tab); if(tabEl) tabEl.style.display='block';
+  var cEl=document.querySelector('.content'); if(cEl) cEl.scrollTop=0;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(el)el.classList.add('active');
-  const titles={summary:"Summary",pipeline:"Pipeline",leads:"Lead Management",stale:"Stale Accounts",inbound:"Inbound Leads",factors:"Factors AI Alerts",forecast:"Forecast",vpforecast:"VP Forecast Intelligence",meetings:"Meeting Intel",meetings:"Meeting Intel",demostage:"Demo Stage",indiscussion:"In Discussion",futureprospect:"Future Prospect",leads:"Leads",closed:"Closed Accounts",engagements:"Forms & Engagement"};
+  const titles={summary:"Summary",pipeline:"Pipeline",leads:"Leads",stale:"Stale Accounts",inbound:"Inbound Leads",factors:"Factors AI Alerts",forecast:"Forecast",vpforecast:"VP Forecast Intelligence",meetings:"Meeting Intel",demostage:"Demo Stage",indiscussion:"In Discussion",futureprospect:"Future Prospect",closed:"Closed Accounts",engagements:"Forms & Engagement"};
   document.getElementById('page-title').textContent=titles[tab]||tab;
   renderCurrentTab();
+  setTimeout(function(){ renderCurrentTab(); }, 50);
 }
 function setFilter(el,id){
   document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
@@ -1553,8 +1554,8 @@ function renderCurrentTab(){
     }, 10);
   }
 
-  const r={summary:renderSummary,pipeline:renderPipeline,leads:renderLeads,stale:renderStale,inbound:renderInboundLeads,factors:renderFactors,forecast:renderForecast,vpforecast:renderVPF,meetings:renderMeetings,meetings:renderMeetings,demostage:renderDemoStage,indiscussion:renderInDiscussion,futureprospect:renderFutureProspect,closed:renderClosed,engagements:renderEngagements};
-  if(r[currentTab]) { try { r[currentTab](); } catch(e) { console.warn('render error',currentTab,e); } }
+  const r={summary:renderSummary,pipeline:renderPipeline,leads:renderLeads,stale:renderStale,inbound:renderInboundLeads,factors:renderFactors,forecast:renderForecast,vpforecast:renderVPF,meetings:renderMeetings,demostage:renderDemoStage,indiscussion:renderInDiscussion,futureprospect:renderFutureProspect,closed:renderClosed,engagements:renderEngagements};
+  if(r[currentTab]) { try { r[currentTab](); } catch(e) { console.error('RENDER ERROR tab='+currentTab, e.message, e.stack); } }
 }
 function dealRow(d,showProb=false){
   const p=prob(d);const wv=showProb?Math.round((d.a||0)*p):null;
@@ -2344,156 +2345,164 @@ var FORECAST_DEALS=[
 let _vpfBand = 'all';
 function setVPFB(band, el) {
   _vpfBand = band;
-  ['all','0','30','50','80','100'].forEach(b => {
-    const btn = document.getElementById('vpfb-'+b);
+  ['all','0','30','50','80','100'].forEach(function(b) {
+    var btn = document.getElementById('vpfb-'+b);
     if(btn) btn.classList.remove('active');
   });
   if(el) el.classList.add('active');
-  renderVPF();
+  doRenderVPF();
 }
 
-function renderVPF() {
-  if(typeof FORECAST_DEALS === 'undefined' || !FORECAST_DEALS.length) return;
-  const tbody = document.getElementById('vpf-tbody');
+function renderVPF() { doRenderVPF(); }
+
+function doRenderVPF() {
+  if(typeof FORECAST_DEALS === 'undefined' || !FORECAST_DEALS || !FORECAST_DEALS.length) return;
+
+  var kpiEl   = document.getElementById('vpf-kpi-row');
+  var tbody   = document.getElementById('vpf-tbody');
+  var footEl  = document.getElementById('vpf-foot');
+  var barsEl  = document.getElementById('vpf-ae-bars');
   if(!tbody) return;
 
-  const aeEl = document.getElementById('vpf-ae');
-  const sortEl = document.getElementById('vpf-sort');
-  const aeFilter = aeEl ? aeEl.value : 'all';
-  const sortBy = sortEl ? sortEl.value : 'date';
+  // Filters
+  var aeEl   = document.getElementById('vpf-ae');
+  var sortEl = document.getElementById('vpf-sort');
+  var aeFilter = aeEl ? aeEl.value : 'all';
+  var sortBy   = sortEl ? sortEl.value : 'date';
 
-  // Role filter
-  let base = [...FORECAST_DEALS];
+  // Base data — role filter
+  var base = FORECAST_DEALS.slice();
   if(currentUser && currentUser.role !== 'lead') {
-    base = base.filter(d => d.o === currentUser.id);
+    base = base.filter(function(d){ return d.o === currentUser.id; });
   } else if(aeFilter !== 'all') {
-    base = base.filter(d => d.o === aeFilter);
-  }
-  // Also apply global activeFilter for sdr_dir/sdr_tl roles
-  if(currentUser && ['sdr_dir','sdr_tl'].includes(currentUser.role)) {
-    base = base.filter(d => ownerMatch(d.o));
+    base = base.filter(function(d){ return d.o === aeFilter; });
   }
 
-  // Update band counts
-  const counts = {0:0, 30:0, 50:0, 80:0, 100:0};
-  base.forEach(d => {
+  // Band counts
+  var counts = {0:0,30:0,50:0,80:0,100:0};
+  base.forEach(function(d){
     if(d.prob === 100) counts[100]++;
     else if(d.prob >= 80) counts[80]++;
     else if(d.prob >= 50) counts[50]++;
     else if(d.prob >= 30) counts[30]++;
     else counts[0]++;
   });
-  ['0','30','50','80','100'].forEach(b => {
-    const el = document.getElementById('vpfn-'+b);
-    if(el) el.textContent = '('+counts[parseInt(b)]+')';
+  ['0','30','50','80','100'].forEach(function(b){
+    var el = document.getElementById('vpfn-'+b);
+    if(el) el.textContent = '(' + counts[parseInt(b)] + ')';
   });
 
   // Band filter
-  let deals = base;
-  if(_vpfBand === '0') deals = base.filter(d => d.prob < 30);
-  else if(_vpfBand === '30') deals = base.filter(d => d.prob >= 30 && d.prob < 50);
-  else if(_vpfBand === '50') deals = base.filter(d => d.prob >= 50 && d.prob < 80);
-  else if(_vpfBand === '80') deals = base.filter(d => d.prob >= 80 && d.prob < 100);
-  else if(_vpfBand === '100') deals = base.filter(d => d.prob === 100);
+  var deals = base;
+  if(_vpfBand === '0')   deals = base.filter(function(d){ return d.prob < 30; });
+  else if(_vpfBand === '30') deals = base.filter(function(d){ return d.prob >= 30 && d.prob < 50; });
+  else if(_vpfBand === '50') deals = base.filter(function(d){ return d.prob >= 50 && d.prob < 80; });
+  else if(_vpfBand === '80') deals = base.filter(function(d){ return d.prob >= 80 && d.prob < 100; });
+  else if(_vpfBand === '100') deals = base.filter(function(d){ return d.prob === 100; });
 
   // Sort
-  if(sortBy === 'date') deals.sort((a,b) => { if(!a.c&&!b.c)return 0; if(!a.c)return 1; if(!b.c)return -1; return new Date(a.c)-new Date(b.c); });
-  else if(sortBy === 'amount') deals.sort((a,b) => b.a - a.a);
-  else if(sortBy === 'prob') deals.sort((a,b) => b.prob - a.prob);
-  else if(sortBy === 'mrr') deals.sort((a,b) => (b.mrr||0) - (a.mrr||0));
+  deals = deals.slice();
+  if(sortBy === 'date') deals.sort(function(a,b){ if(!a.c&&!b.c)return 0; if(!a.c)return 1; if(!b.c)return -1; return new Date(a.c)-new Date(b.c); });
+  else if(sortBy === 'amount') deals.sort(function(a,b){ return b.a - a.a; });
+  else if(sortBy === 'prob') deals.sort(function(a,b){ return b.prob - a.prob; });
+  else if(sortBy === 'mrr') deals.sort(function(a,b){ return (b.mrr||0)-(a.mrr||0); });
 
   // KPIs
-  const totalPipe = base.reduce((s,d)=>s+d.a,0);
-  const wtdPipe = Math.round(base.reduce((s,d)=>s+(d.a*d.prob/100),0));
-  const totalMRR = base.reduce((s,d)=>s+(d.mrr||0),0);
-  const high = base.filter(d=>d.prob>=80).reduce((s,d)=>s+d.a,0);
-  const closing = base.filter(d=>d.c&&d.c.startsWith('2026-05')).reduce((s,d)=>s+d.a,0);
-  const kpiEl = document.getElementById('vpf-kpi-row');
+  var totalPipe = base.reduce(function(s,d){return s+d.a;},0);
+  var wtdPipe   = Math.round(base.reduce(function(s,d){return s+(d.a*d.prob/100);},0));
+  var mrrPipe   = base.reduce(function(s,d){return s+(d.mrr||0);},0);
+  var highAmt   = base.filter(function(d){return d.prob>=80;}).reduce(function(s,d){return s+d.a;},0);
+  var now       = new Date();
+  var mayAmt    = base.filter(function(d){return d.c && d.c.slice(0,7)==='2026-05';}).reduce(function(s,d){return s+d.a;},0);
+
+  function fmt(n){ if(!n)return'$0'; if(n>=1e6)return'$'+(n/1e6).toFixed(1)+'M'; if(n>=1e3)return'$'+Math.round(n/1e3)+'K'; return'$'+n.toLocaleString(); }
+  function clr(c){ return OWNER_COLORS[c]||'#6b7280'; }
+  function oname(c){ return OWNERS[c]||c; }
+
   if(kpiEl) kpiEl.innerHTML = [
-    ['Total Pipeline', fmtAmt(totalPipe), base.length+' deals', 'var(--teal)'],
-    ['Weighted Forecast', fmtAmt(wtdPipe), 'prob-adjusted', 'var(--blue)'],
-    ['Closing May', fmtAmt(closing), base.filter(d=>d.c&&d.c.startsWith('2026-05')).length+' deals', 'var(--amber)'],
-    ['80–100% Confident', fmtAmt(high), (counts[80]+counts[100])+' deals', '#16a34a'],
-    ['MRR Pipeline', (totalMRR>0?'$'+totalMRR.toLocaleString():'-'), totalMRR>0?'monthly recurring':'no MRR data', 'var(--purple)'],
-  ].map(([lbl,val,sub,col])=>`<div class="vpf-kpi"><div class="lbl">${lbl}</div><div class="val" style="color:${col}">${val}</div><div class="sub">${sub}</div></div>`).join('');
-
-  // Band badge
-  function bb(p) {
-    if(p===100) return '<span class="vpf-badge b100x">✓ 100%</span>';
-    if(p>=80) return '<span class="vpf-badge b80x">80–100%</span>';
-    if(p>=50) return '<span class="vpf-badge b50x">50–80%</span>';
-    if(p>=30) return '<span class="vpf-badge b30x">30–50%</span>';
-    return '<span class="vpf-badge b0x">0–30%</span>';
-  }
-
-  // Confidence bar
-  function cbar(p) {
-    const c = p>=80?'#16a34a':p>=50?'#d97706':p>=30?'#ea580c':'#dc2626';
-    return `<div style="display:flex;align-items:center;gap:6px"><div class="vpf-bar-wrap"><div class="vpf-bar-fill" style="width:${p}%;background:${c}"></div></div><span style="font-size:11px;font-weight:700;color:${c}">${p}%</span></div>`;
-  }
-
-  // Rows
-  const rows = deals.map(d => {
-    const oc = OWNER_COLORS[d.o]||'#6b7280';
-    const wtd = Math.round(d.a*d.prob/100);
-    const dt = d.c ? new Date(d.c) : null;
-    const closeStr = dt ? dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'}) : '—';
-    const days = dt ? Math.ceil((dt-new Date())/86400000) : null;
-    const urgency = days===null?'': days<0?'<span style="font-size:9px;background:#fef2f2;color:#dc2626;border:1px solid #fecaca;padding:1px 5px;border-radius:4px;margin-left:4px">Overdue</span>': days<=7?`<span style="font-size:9px;background:#fff7ed;color:#ea580c;border:1px solid #fed7aa;padding:1px 5px;border-radius:4px;margin-left:4px">${days}d left</span>`: days<=30?`<span style="font-size:9px;background:#fffbeb;color:#d97706;border:1px solid #fde68a;padding:1px 5px;border-radius:4px;margin-left:4px">${days}d</span>`:'';
-    return `<tr>
-      <td style="font-weight:600;color:var(--text);max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${d.n}">${d.n}</td>
-      <td style="font-size:11px;font-weight:600;color:${oc};white-space:nowrap">${OWNERS[d.o]||d.o}</td>
-      <td style="font-size:11px;white-space:nowrap">${closeStr}${urgency}</td>
-      <td>${cbar(d.prob)}</td>
-      <td>${bb(d.prob)}</td>
-      <td style="font-weight:700;color:var(--teal)">${fmtAmt(d.a)}</td>
-      <td style="font-size:11px;font-weight:600;color:var(--purple)">${d.mrr>0?'$'+d.mrr.toLocaleString()+'/mo':'—'}</td>
-      <td style="font-size:11px;font-weight:600;color:var(--blue)">${fmtAmt(wtd)}</td>
-      <td><a href="${d.url}" target="_blank" class="hs-link">&#8599;</a></td>
-    </tr>`;
+    ['Total Pipeline', fmt(totalPipe), base.length+' deals', 'var(--teal)'],
+    ['Weighted Forecast', fmt(wtdPipe), 'prob-adjusted', '#2563eb'],
+    ['Closing May', fmt(mayAmt), base.filter(function(d){return d.c&&d.c.slice(0,7)==='2026-05';}).length+' deals', '#d97706'],
+    ['80–100% Confident', fmt(highAmt), counts[80]+counts[100]+' deals', '#16a34a'],
+    ['MRR Pipeline', mrrPipe>0?'$'+mrrPipe.toLocaleString()+'/mo':'-', mrrPipe>0?'monthly recurring':'no MRR data', '#7c3aed'],
+  ].map(function(k){
+    return '<div class="kpi"><div class="kpi-label">'+k[0]+'</div><div class="kpi-val" style="color:'+k[3]+'">'+k[1]+'</div><div class="kpi-sub">'+k[2]+'</div></div>';
   }).join('');
+
+  function bb(p){
+    if(p===100) return '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:#e6f7f2;color:#0d9e75;border:1px solid #6ee7c7">✓ 100%</span>';
+    if(p>=80)   return '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0">80–100%</span>';
+    if(p>=50)   return '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:#fffbeb;color:#d97706;border:1px solid #fde68a">50–80%</span>';
+    if(p>=30)   return '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:#fff7ed;color:#ea580c;border:1px solid #fed7aa">30–50%</span>';
+    return '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:#fef2f2;color:#dc2626;border:1px solid #fecaca">0–30%</span>';
+  }
+
+  function cbar(p){
+    var c = p>=80?'#16a34a':p>=50?'#d97706':p>=30?'#ea580c':'#dc2626';
+    return '<div style="display:flex;align-items:center;gap:6px"><div style="width:80px;height:6px;border-radius:3px;background:#e5e7eb;overflow:hidden;display:inline-block;vertical-align:middle"><div style="width:'+p+'%;height:100%;background:'+c+'"></div></div><span style="font-size:11px;font-weight:700;color:'+c+'">'+p+'%</span></div>';
+  }
+
+  var rows = deals.map(function(d){
+    var oc = clr(d.o);
+    var wtd = Math.round(d.a*d.prob/100);
+    var dt = d.c ? new Date(d.c) : null;
+    var cs = dt ? dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'}) : '—';
+    var days = dt ? Math.ceil((dt-new Date())/86400000) : null;
+    var urg = '';
+    if(days !== null){
+      if(days<0) urg='<span style="font-size:9px;background:#fef2f2;color:#dc2626;border:1px solid #fecaca;padding:1px 5px;border-radius:4px;margin-left:4px">Overdue</span>';
+      else if(days<=7) urg='<span style="font-size:9px;background:#fff7ed;color:#ea580c;border:1px solid #fed7aa;padding:1px 5px;border-radius:4px;margin-left:4px">'+days+'d left</span>';
+      else if(days<=30) urg='<span style="font-size:9px;background:#fffbeb;color:#d97706;border:1px solid #fde68a;padding:1px 5px;border-radius:4px;margin-left:4px">'+days+'d</span>';
+    }
+    return '<tr>'
+      +'<td style="font-weight:600;color:var(--text);max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+d.n+'">'+d.n+'</td>'
+      +'<td style="font-size:11px;font-weight:600;color:'+oc+';white-space:nowrap">'+oname(d.o)+'</td>'
+      +'<td style="font-size:11px;white-space:nowrap">'+cs+urg+'</td>'
+      +'<td>'+cbar(d.prob)+'</td>'
+      +'<td>'+bb(d.prob)+'</td>'
+      +'<td style="font-weight:700;color:var(--teal)">'+fmt(d.a)+'</td>'
+      +'<td style="font-size:11px;font-weight:600;color:#7c3aed">'+(d.mrr>0?'$'+d.mrr.toLocaleString()+'/mo':'—')+'</td>'
+      +'<td style="font-size:11px;font-weight:600;color:#2563eb">'+fmt(wtd)+'</td>'
+      +'<td><a href="'+d.url+'" target="_blank" class="hs-link">&#8599;</a></td>'
+    +'</tr>';
+  }).join('');
+
   tbody.innerHTML = rows || '<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--dim)">No deals</td></tr>';
 
-  // Footer
-  const foot = document.getElementById('vpf-foot');
-  if(foot) {
-    const vAmt = deals.reduce((s,d)=>s+d.a,0);
-    const vWtd = Math.round(deals.reduce((s,d)=>s+d.a*d.prob/100,0));
-    const vMRR = deals.reduce((s,d)=>s+(d.mrr||0),0);
-    foot.innerHTML = `<span>${deals.length} deals</span><span>Total: <strong style="color:var(--teal)">${fmtAmt(vAmt)}</strong></span><span>Weighted: <strong style="color:var(--blue)">${fmtAmt(vWtd)}</strong></span>${vMRR>0?`<span>MRR: <strong style="color:var(--purple)">$${vMRR.toLocaleString()}/mo</strong></span>`:''}`;
+  if(footEl){
+    var fv=deals.reduce(function(s,d){return s+d.a;},0);
+    var fw=Math.round(deals.reduce(function(s,d){return s+d.a*d.prob/100;},0));
+    var fm=deals.reduce(function(s,d){return s+(d.mrr||0);},0);
+    footEl.innerHTML='<span>'+deals.length+' deals</span><span>Total: <strong style="color:var(--teal)">'+fmt(fv)+'</strong></span><span>Weighted: <strong style="color:#2563eb">'+fmt(fw)+'</strong></span>'+(fm>0?'<span>MRR: <strong style="color:#7c3aed">$'+fm.toLocaleString()+'/mo</strong></span>':'');
   }
 
-  // Per-AE bar chart
-  const aeBars = document.getElementById('vpf-ae-bars');
-  if(aeBars) {
-    const AES = ['67333606','160768701','160575588','160419465'];
-    const rows2 = AES.map(id=>{
-      const ds = base.filter(d=>d.o===id);
-      const pipe = ds.reduce((s,d)=>s+d.a,0);
-      const wtd2 = Math.round(ds.reduce((s,d)=>s+d.a*d.prob/100,0));
-      const mrr2 = ds.reduce((s,d)=>s+(d.mrr||0),0);
-      return {id,name:OWNERS[id]||id,pipe,wtd:wtd2,mrr:mrr2,cnt:ds.length};
-    }).filter(r=>r.pipe>0).sort((a,b)=>b.pipe-a.pipe);
-    const maxP = Math.max(...rows2.map(r=>r.pipe),1);
-    aeBars.innerHTML = rows2.map(r=>{
-      const c = OWNER_COLORS[r.id]||'#6b7280';
-      const pct = Math.round(r.pipe/maxP*100);
-      const wPct = Math.round(r.wtd/maxP*100);
-      return `<div style="margin-bottom:14px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:5px;flex-wrap:wrap;gap:6px">
-          <span style="font-size:12px;font-weight:600;color:${c}">${r.name}</span>
-          <div style="display:flex;gap:12px;font-size:11px">
-            <span>Pipeline: <strong style="color:var(--teal)">${fmtAmt(r.pipe)}</strong></span>
-            <span>Weighted: <strong style="color:var(--blue)">${fmtAmt(r.wtd)}</strong></span>
-            ${r.mrr>0?`<span>MRR: <strong style="color:var(--purple)">$${r.mrr.toLocaleString()}/mo</strong></span>`:''}
-            <span style="color:var(--muted)">${r.cnt} deals</span>
-          </div>
-        </div>
-        <div style="position:relative;height:8px;background:var(--border);border-radius:4px;overflow:hidden">
-          <div style="position:absolute;height:100%;width:${pct}%;background:${c};opacity:0.2;border-radius:4px"></div>
-          <div style="position:absolute;height:100%;width:${wPct}%;background:${c};border-radius:4px"></div>
-        </div>
-      </div>`;
+  if(barsEl){
+    var AES=['67333606','160768701','160575588','160419465'];
+    var barRows=AES.map(function(id){
+      var ds=base.filter(function(d){return d.o===id;});
+      var pipe=ds.reduce(function(s,d){return s+d.a;},0);
+      var wtd2=Math.round(ds.reduce(function(s,d){return s+d.a*d.prob/100;},0));
+      var mrr2=ds.reduce(function(s,d){return s+(d.mrr||0);},0);
+      return {id:id,name:oname(id),pipe:pipe,wtd:wtd2,mrr:mrr2,cnt:ds.length};
+    }).filter(function(r){return r.pipe>0;}).sort(function(a,b){return b.pipe-a.pipe;});
+    var maxP=Math.max.apply(null,barRows.map(function(r){return r.pipe;})||[1]);
+    barsEl.innerHTML=barRows.map(function(r){
+      var c=clr(r.id);
+      var pct=Math.round(r.pipe/maxP*100);
+      var wPct=Math.round(r.wtd/maxP*100);
+      return '<div style="margin-bottom:14px">'
+        +'<div style="display:flex;justify-content:space-between;margin-bottom:5px;flex-wrap:wrap;gap:6px">'
+        +'<span style="font-size:12px;font-weight:600;color:'+c+'">'+r.name+'</span>'
+        +'<div style="display:flex;gap:12px;font-size:11px">'
+        +'<span>Pipeline: <strong style="color:var(--teal)">'+fmt(r.pipe)+'</strong></span>'
+        +'<span>Weighted: <strong style="color:#2563eb">'+fmt(r.wtd)+'</strong></span>'
+        +(r.mrr>0?'<span>MRR: <strong style="color:#7c3aed">$'+r.mrr.toLocaleString()+'/mo</strong></span>':'')
+        +'<span style="color:var(--muted)">'+r.cnt+' deals</span>'
+        +'</div></div>'
+        +'<div style="position:relative;height:8px;background:var(--border);border-radius:4px;overflow:hidden">'
+        +'<div style="position:absolute;height:100%;width:'+pct+'%;background:'+c+';opacity:0.2;border-radius:4px"></div>'
+        +'<div style="position:absolute;height:100%;width:'+wPct+'%;background:'+c+';border-radius:4px"></div>'
+        +'</div></div>';
     }).join('') || '<div class="empty">No data</div>';
   }
 }
