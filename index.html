@@ -684,6 +684,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
           <div style="font-size:11px;color:var(--muted);margin-top:2px">Live from Google Calendar &middot; Last 45 days &middot; Click follow-up to mark done</div>
         </div>
         <input id="mtg-search" type="text" class="search-bar" placeholder="Search company or meeting..." style="margin:0;width:230px">
+        <button onclick="downloadMeetingsCSV()" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">
+          &#11015; Export CSV
+        </button>
       </div>
       <div id="mtg-kpis" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px"></div>
       <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
@@ -2680,6 +2683,53 @@ function renderMeetings(){
   }).join('')||'<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--dim)">No meetings found</td></tr>';
   var foot=document.getElementById('mtg-footer');
   if(foot){var p=filtered.filter(function(m){return !_mtgDone[m.id];}).length,dn2=filtered.filter(function(m){return !!_mtgDone[m.id];}).length;foot.innerHTML='<span>'+filtered.length+' meetings shown</span><span style="color:#d97706">&#9888; '+p+' need follow-up</span><span style="color:#059669">&#10003; '+dn2+' done</span>';}
+}
+
+
+
+function downloadMeetingsCSV() {
+  if(typeof MEETINGS_DATA === 'undefined' || !MEETINGS_DATA.length) return;
+  var today = new Date('2026-05-22');
+
+  // Apply current filter
+  var filtered = MEETINGS_DATA.filter(function(m) {
+    if(_mtgFilter === 'pending') return !_mtgDone[m.id];
+    if(_mtgFilter === 'done') return !!_mtgDone[m.id];
+    if(_mtgFilter !== 'all' && m.type !== _mtgFilter) return false;
+    var q = ((document.getElementById('mtg-search')||{}).value||'').toLowerCase();
+    if(q && !m.company.toLowerCase().includes(q) && !m.title.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  var headers = ['Company','Meeting Title','Type','Date','Days Ago','Follow-Up Action','Status','Calendar Link'];
+  var rows = filtered.map(function(m) {
+    var d = new Date(m.date);
+    var days = Math.round((today - d) / 86400000);
+    var daysLabel = days === 0 ? 'Today' : days === 1 ? 'Yesterday' : days + 'd ago';
+    var status = _mtgDone[m.id] ? 'Done' : 'Pending';
+    var followup = _mtgDone[m.id] ? 'Done' : m.followup;
+    return [
+      '"' + (m.company||'').replace(/"/g,'""') + '"',
+      '"' + (m.title||'').replace(/"/g,'""') + '"',
+      '"' + (m.type||'') + '"',
+      '"' + (m.date||'') + '"',
+      '"' + daysLabel + '"',
+      '"' + followup.replace(/"/g,'""') + '"',
+      '"' + status + '"',
+      '"' + (m.url||'') + '"'
+    ].join(',');
+  });
+
+  var csv = headers.join(',') + '\n' + rows.join('\n');
+  var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'spyne_meetings_' + new Date().toISOString().slice(0,10) + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 
