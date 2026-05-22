@@ -671,43 +671,35 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
         <div id="vpf-ae-bars"></div>
       </div>
     </div>
-    <div class="tab-pane" id="tab-meetings" style="display:none" data-tab="meetings">
-      <div style="padding:0">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
-          <div>
-            <div style="font-size:15px;font-weight:700;color:var(--text)">Meeting Intel</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:2px">Live from Google Calendar &middot; Last 45 days &middot; 117 meetings</div>
-          </div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <input id="mtg-search" type="text" class="search-bar" placeholder="Search..." style="margin:0;width:180px" oninput="renderMeetings()">
-            <button onclick="downloadMeetingsCSV()" style="padding:7px 12px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer">&#11015; Export</button>
-          </div>
-        </div>
-        <div id="mtg-kpis" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px"></div>
-        <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
-          <button class="di-tab f-all active" id="mtgf-all" onclick="setMtgFilter('all',this)">All</button>
+    <div class="tab-pane" id="tab-meetings" style="display:none">
+      <div style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div style="font-size:15px;font-weight:700;color:var(--text)">Meeting Intel <span style="font-size:11px;font-weight:400;color:var(--muted)">— Last 45 days from Google Calendar</span></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="di-tab f-all active" onclick="setMtgFilter('all',this)">All</button>
           <button class="di-tab" onclick="setMtgFilter('Demo',this)">Demo</button>
-          <button class="di-tab" onclick="setMtgFilter('Discussion',this)">Discussion</button>
-          <button class="di-tab" onclick="setMtgFilter('Partnership',this)">Partnership</button>
           <button class="di-tab" onclick="setMtgFilter('Onboarding',this)">Onboarding</button>
           <button class="di-tab" style="border-color:#f59e0b;color:#b45309" onclick="setMtgFilter('pending',this)">&#9888; Follow-Up</button>
           <button class="di-tab" style="border-color:#6ee7b7;color:#059669" onclick="setMtgFilter('done',this)">&#10003; Done</button>
+          <input id="mtg-search" type="text" placeholder="Search..." style="padding:5px 10px;border:1px solid var(--border);border-radius:8px;font-size:11px;width:150px" oninput="renderMeetings()">
         </div>
-        <div class="card" style="padding:0;min-height:200px">
-          <div style="overflow-x:auto;overflow-y:auto;height:600px;min-height:400px">
-            <table class="di-table">
-              <thead><tr>
-                <th style="min-width:140px">Company</th>
-                <th style="min-width:180px">Meeting</th>
-                <th>Type</th><th>Date</th><th>Days Ago</th>
-                <th style="min-width:200px">Follow-Up</th>
-                <th>Link</th>
-              </tr></thead>
-              <tbody id="mtg-tbody"></tbody>
-            </table>
-          </div>
-          <div id="mtg-footer" style="padding:10px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;gap:16px"></div>
-        </div>
+      </div>
+      <div id="mtg-kpis" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px"></div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0;overflow:hidden">
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead>
+            <tr style="background:#fafafa">
+              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;border-bottom:2px solid var(--border);min-width:130px">Company</th>
+              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;border-bottom:2px solid var(--border);min-width:180px">Meeting</th>
+              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;border-bottom:2px solid var(--border)">Type</th>
+              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;border-bottom:2px solid var(--border)">Date</th>
+              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;border-bottom:2px solid var(--border)">Days Ago</th>
+              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;border-bottom:2px solid var(--border);min-width:200px">Follow-Up</th>
+              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;border-bottom:2px solid var(--border)">Link</th>
+            </tr>
+          </thead>
+          <tbody id="mtg-tbody" style="display:table-row-group"></tbody>
+        </table>
+        <div id="mtg-footer" style="padding:10px 14px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)"></div>
       </div>
     </div><div class="two-col"><div class="card"><div class="card-title">Closing May '26</div><div id="closing-month"></div></div><div class="card"><div class="card-title">Closing next 30 days</div><div id="closing-30d"></div></div></div><div class="card"><div class="card-title">Weighted pipeline</div><div id="forecast-list"></div></div></div>
   </div>
