@@ -677,37 +677,37 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
           <div style="font-size:15px;font-weight:700;color:var(--text)">Meeting Intel</div>
           <div style="font-size:11px;color:var(--muted);margin-top:2px">Live from Google Calendar &middot; Last 45 days &middot; Click follow-up to mark done</div>
         </div>
-        <input id="mtg-search" type="text" class="search-bar" placeholder="Search company or meeting..." style="margin:0;width:230px">
-        <button onclick="downloadMeetingsCSV()" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">
-          &#11015; Export CSV
-        </button>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="mtg-search" type="text" class="search-bar" placeholder="Search..." style="margin:0;width:180px">
+          <button onclick="downloadMeetingsCSV()" style="padding:7px 12px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">&#11015; Export</button>
+        </div>
       </div>
       <div id="mtg-kpis" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px"></div>
-      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
-        <button class="di-tab f-all active" id="mtgf-all" onclick="setMtgFilter('all',this)">All</button>
-        <button class="di-tab" id="mtgf-Demo" onclick="setMtgFilter('Demo',this)">Demo</button>
-        <button class="di-tab" id="mtgf-Discussion" onclick="setMtgFilter('Discussion',this)">Discussion</button>
-        <button class="di-tab" id="mtgf-Partnership" onclick="setMtgFilter('Partnership',this)">Partnership</button>
-        <button class="di-tab" id="mtgf-Onboarding" onclick="setMtgFilter('Onboarding',this)">Onboarding</button>
-        <button class="di-tab" style="border-color:#f59e0b;color:#b45309" id="mtgf-pending" onclick="setMtgFilter('pending',this)">&#9888; Needs Follow-Up</button>
-        <button class="di-tab" style="border-color:#6ee7b7;color:#059669" id="mtgf-done" onclick="setMtgFilter('done',this)">&#10003; Done</button>
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap" id="mtg-filters">
+        <button class="di-tab f-all active" onclick="setMtgFilter('all',this)">All</button>
+        <button class="di-tab" onclick="setMtgFilter('Demo',this)">Demo</button>
+        <button class="di-tab" onclick="setMtgFilter('Discussion',this)">Discussion</button>
+        <button class="di-tab" onclick="setMtgFilter('Partnership',this)">Partnership</button>
+        <button class="di-tab" onclick="setMtgFilter('Onboarding',this)">Onboarding</button>
+        <button class="di-tab" style="border-color:#f59e0b;color:#b45309" onclick="setMtgFilter('pending',this)">&#9888; Follow-Up</button>
+        <button class="di-tab" style="border-color:#6ee7b7;color:#059669" onclick="setMtgFilter('done',this)">&#10003; Done</button>
       </div>
       <div class="card" style="padding:0">
         <div style="overflow-x:auto;overflow-y:auto;max-height:calc(100vh - 320px)">
           <table class="di-table">
             <thead><tr>
-              <th style="min-width:150px">Company</th>
-              <th style="min-width:200px">Meeting Title</th>
+              <th style="min-width:140px">Company</th>
+              <th style="min-width:180px">Meeting</th>
               <th>Type</th>
               <th>Date</th>
               <th>Days Ago</th>
-              <th style="min-width:210px">Follow-Up Action</th>
+              <th style="min-width:200px">Follow-Up</th>
               <th>Link</th>
             </tr></thead>
-            <tbody id="mtg-tbody"></tbody>
+            <tbody id="mtg-tbody"><tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">Loading...</td></tr></tbody>
           </table>
         </div>
-        <div id="mtg-footer" style="padding:10px 16px;border-top:1px solid var(--border);background:var(--hover);font-size:11px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap"></div>
+        <div id="mtg-footer" style="padding:10px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;gap:16px"></div>
       </div>
     </div><div class="two-col"><div class="card"><div class="card-title">Closing May '26</div><div id="closing-month"></div></div><div class="card"><div class="card-title">Closing next 30 days</div><div id="closing-30d"></div></div></div><div class="card"><div class="card-title">Weighted pipeline</div><div id="forecast-list"></div></div></div>
   </div>
@@ -2648,51 +2648,10 @@ var MEETINGS_DATA=[
 ];
 
 
-var _mtgFilter='all', _mtgDone={};
-function setMtgFilter(f,el){
-  _mtgFilter=f;
-  document.querySelectorAll('#tab-meetings .di-tab').forEach(function(b){b.classList.remove('active');});
-  if(el)el.classList.add('active');
-  renderMeetings();
-}
-function mtgToggleDone(id){_mtgDone[id]=!_mtgDone[id];renderMeetings();}
-function renderMeetings(){
-  if(typeof MEETINGS_DATA==='undefined')return;
-  var tbody=document.getElementById('mtg-tbody');
-  if(!tbody)return;
-  var today=new Date('2026-05-22');
-  var q=((document.getElementById('mtg-search')||{}).value||'').toLowerCase();
-  var total=MEETINGS_DATA.length;
-  var demos=MEETINGS_DATA.filter(function(m){return m.type==='Demo';}).length;
-  var onb=MEETINGS_DATA.filter(function(m){return m.type==='Onboarding';}).length;
-  var pend=MEETINGS_DATA.filter(function(m){return !_mtgDone[m.id];}).length;
-  var dn=MEETINGS_DATA.filter(function(m){return !!_mtgDone[m.id];}).length;
-  var kEl=document.getElementById('mtg-kpis');
-  if(kEl)kEl.innerHTML=[['Total Meetings',''+total,'all time','var(--teal)'],['Demos',''+demos,'deal opps','var(--blue)'],['Onboardings',''+onb,'customers','#7c3aed'],['Needs Follow-Up',''+pend,'pending','#d97706'],['Done',''+dn,'completed','#059669']].map(function(k){return '<div class="kpi"><div class="kpi-label">'+k[0]+'</div><div class="kpi-val" style="color:'+k[3]+'">'+k[1]+'</div><div class="kpi-sub">'+k[2]+'</div></div>';}).join('');
-  var filtered=MEETINGS_DATA.filter(function(m){
-    if(_mtgFilter==='pending')return !_mtgDone[m.id];
-    if(_mtgFilter==='done')return !!_mtgDone[m.id];
-    if(_mtgFilter!=='all'&&m.type!==_mtgFilter)return false;
-    if(q&&!m.company.toLowerCase().includes(q)&&!m.title.toLowerCase().includes(q))return false;
-    return true;
-  });
-  function tb(t){var c=t==='Demo'?'mt-demo':t==='Discussion'?'mt-disc':t==='Onboarding'?'mt-ob':'mt-part';return '<span class="mt-badge '+c+'">'+t+'</span>';}
-  function db(date){var d=new Date(date),n=Math.round((today-d)/86400000),c=n>30?'mt-hot':n>14?'mt-warm':n>7?'mt-mild':'mt-cool',l=n===0?'Today':n===1?'Yesterday':n+'d ago';return '<span class="mt-days '+c+'">'+l+'</span>';}
-  tbody.innerHTML=filtered.map(function(m){
-    var isDone=!!_mtgDone[m.id],d=new Date(m.date),ds=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'});
-    return '<tr>'
-      +'<td style="font-weight:600;color:var(--text);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+m.company+'">'+m.company+'</td>'
-      +'<td style="font-size:11px;color:var(--muted);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+m.title+'">'+m.title+'</td>'
-      +'<td>'+tb(m.type)+'</td>'
-      +'<td style="font-size:11px;white-space:nowrap">'+ds+'</td>'
-      +'<td>'+db(m.date)+'</td>'
-      +'<td><span class="fu-btn'+(isDone?' fu-done':'')+'" onclick="mtgToggleDone(\''+m.id+'\')">'+(isDone?'&#10003; Done':'&#8599; '+m.followup)+'</span></td>'
-      +'<td><a href="'+m.url+'" target="_blank" class="hs-link">&#8599;</a></td>'
-    +'</tr>';
-  }).join('')||'<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--dim)">No meetings found</td></tr>';
-  var foot=document.getElementById('mtg-footer');
-  if(foot){var p=filtered.filter(function(m){return !_mtgDone[m.id];}).length,dn2=filtered.filter(function(m){return !!_mtgDone[m.id];}).length;foot.innerHTML='<span>'+filtered.length+' meetings shown</span><span style="color:#d97706">&#9888; '+p+' need follow-up</span><span style="color:#059669">&#10003; '+dn2+' done</span>';}
-}
+
+
+
+
 
 
 
@@ -2739,6 +2698,90 @@ function downloadMeetingsCSV() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+
+
+var _mtgFilter='all';
+var _mtgDone={};
+
+function setMtgFilter(f,el){
+  _mtgFilter=f;
+  var btns=document.querySelectorAll('#mtg-filters .di-tab');
+  for(var i=0;i<btns.length;i++) btns[i].classList.remove('active');
+  if(el) el.classList.add('active');
+  renderMeetings();
+}
+
+function mtgToggleDone(id){
+  _mtgDone[id]=!_mtgDone[id];
+  renderMeetings();
+}
+
+function renderMeetings(){
+  var tbody=document.getElementById('mtg-tbody');
+  if(!tbody) return;
+  if(typeof MEETINGS_DATA==='undefined'||!MEETINGS_DATA.length){
+    tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">No meetings data</td></tr>';
+    return;
+  }
+  var today=new Date('2026-05-22');
+  var q=document.getElementById('mtg-search')?document.getElementById('mtg-search').value.toLowerCase():'';
+  var total=MEETINGS_DATA.length;
+  var demos=0,onbs=0,pend=0,dn=0;
+  for(var i=0;i<MEETINGS_DATA.length;i++){
+    var m=MEETINGS_DATA[i];
+    if(m.type==='Demo') demos++;
+    if(m.type==='Onboarding') onbs++;
+    if(_mtgDone[m.id]) dn++; else pend++;
+  }
+  var kEl=document.getElementById('mtg-kpis');
+  if(kEl) kEl.innerHTML=
+    '<div class="kpi"><div class="kpi-label">Total</div><div class="kpi-val" style="color:var(--teal)">'+total+'</div><div class="kpi-sub">meetings</div></div>'+
+    '<div class="kpi"><div class="kpi-label">Demos</div><div class="kpi-val" style="color:#2563eb">'+demos+'</div><div class="kpi-sub">deal opps</div></div>'+
+    '<div class="kpi"><div class="kpi-label">Onboardings</div><div class="kpi-val" style="color:#7c3aed">'+onbs+'</div><div class="kpi-sub">customers</div></div>'+
+    '<div class="kpi"><div class="kpi-label">Needs Follow-Up</div><div class="kpi-val" style="color:#d97706">'+pend+'</div><div class="kpi-sub">pending</div></div>'+
+    '<div class="kpi"><div class="kpi-label">Done</div><div class="kpi-val" style="color:#059669">'+dn+'</div><div class="kpi-sub">completed</div></div>';
+  var filtered=[];
+  for(var i=0;i<MEETINGS_DATA.length;i++){
+    var m=MEETINGS_DATA[i];
+    if(_mtgFilter==='pending'&&_mtgDone[m.id]) continue;
+    if(_mtgFilter==='done'&&!_mtgDone[m.id]) continue;
+    if(_mtgFilter!=='all'&&_mtgFilter!=='pending'&&_mtgFilter!=='done'&&m.type!==_mtgFilter) continue;
+    if(q&&m.company.toLowerCase().indexOf(q)===-1&&m.title.toLowerCase().indexOf(q)===-1) continue;
+    filtered.push(m);
+  }
+  var rows='';
+  for(var i=0;i<filtered.length;i++){
+    var m=filtered[i];
+    var d=new Date(m.date);
+    var days=Math.round((today-d)/86400000);
+    var dLabel=days===0?'Today':days===1?'Yesterday':days+'d ago';
+    var dCls=days>30?'mt-hot':days>14?'mt-warm':days>7?'mt-mild':'mt-cool';
+    var tCls=m.type==='Demo'?'mt-demo':m.type==='Discussion'?'mt-disc':m.type==='Onboarding'?'mt-ob':'mt-part';
+    var ds=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'});
+    var isDone=!!_mtgDone[m.id];
+    var fuTxt=isDone?'&#10003; Done':'&#8599; '+m.followup;
+    var fuCls=isDone?'fu-btn fu-done':'fu-btn';
+    rows+='<tr>'
+      +'<td style="font-weight:600;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+m.company+'">'+m.company+'</td>'
+      +'<td style="font-size:11px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+m.title+'">'+m.title+'</td>'
+      +'<td><span class="mt-badge '+tCls+'">'+m.type+'</span></td>'
+      +'<td style="font-size:11px;white-space:nowrap">'+ds+'</td>'
+      +'<td><span class="mt-days '+dCls+'">'+dLabel+'</span></td>'
+      +'<td><span class="'+fuCls+'" onclick="mtgToggleDone(\''+m.id+'\')">'+fuTxt+'</span></td>'
+      +'<td><a href="'+m.url+'" target="_blank" class="hs-link">&#8599;</a></td>'
+      +'</tr>';
+  }
+  tbody.innerHTML=rows||'<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">No meetings found</td></tr>';
+  var foot=document.getElementById('mtg-footer');
+  if(foot){
+    var fp=filtered.filter(function(m){return !_mtgDone[m.id];}).length;
+    var fd=filtered.filter(function(m){return !!_mtgDone[m.id];}).length;
+    foot.innerHTML='<span>'+filtered.length+' meetings</span><span style="color:#d97706">&#9888; '+fp+' pending</span><span style="color:#059669">&#10003; '+fd+' done</span>';
+  }
+  var s=document.getElementById('mtg-search');
+  if(s&&!s._bound){s._bound=true;s.addEventListener('input',renderMeetings);}
 }
 
 
