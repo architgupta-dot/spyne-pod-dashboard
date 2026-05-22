@@ -672,42 +672,42 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
       </div>
     </div>
     <div class="tab-pane" id="tab-meetings" style="display:none">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
-        <div>
-          <div style="font-size:15px;font-weight:700;color:var(--text)">Meeting Intel</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">Live from Google Calendar &middot; Last 45 days &middot; Click follow-up to mark done</div>
+      <div style="padding:0">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+          <div>
+            <div style="font-size:15px;font-weight:700;color:var(--text)">Meeting Intel</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">Live from Google Calendar &middot; Last 45 days &middot; 117 meetings</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="mtg-search" type="text" class="search-bar" placeholder="Search..." style="margin:0;width:180px" oninput="renderMeetings()">
+            <button onclick="downloadMeetingsCSV()" style="padding:7px 12px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer">&#11015; Export</button>
+          </div>
         </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <input id="mtg-search" type="text" class="search-bar" placeholder="Search..." style="margin:0;width:180px">
-          <button onclick="downloadMeetingsCSV()" style="padding:7px 12px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">&#11015; Export</button>
+        <div id="mtg-kpis" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px"></div>
+        <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+          <button class="di-tab f-all active" id="mtgf-all" onclick="setMtgFilter('all',this)">All</button>
+          <button class="di-tab" onclick="setMtgFilter('Demo',this)">Demo</button>
+          <button class="di-tab" onclick="setMtgFilter('Discussion',this)">Discussion</button>
+          <button class="di-tab" onclick="setMtgFilter('Partnership',this)">Partnership</button>
+          <button class="di-tab" onclick="setMtgFilter('Onboarding',this)">Onboarding</button>
+          <button class="di-tab" style="border-color:#f59e0b;color:#b45309" onclick="setMtgFilter('pending',this)">&#9888; Follow-Up</button>
+          <button class="di-tab" style="border-color:#6ee7b7;color:#059669" onclick="setMtgFilter('done',this)">&#10003; Done</button>
         </div>
-      </div>
-      <div id="mtg-kpis" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px"></div>
-      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap" id="mtg-filters">
-        <button class="di-tab f-all active" onclick="setMtgFilter('all',this)">All</button>
-        <button class="di-tab" onclick="setMtgFilter('Demo',this)">Demo</button>
-        <button class="di-tab" onclick="setMtgFilter('Discussion',this)">Discussion</button>
-        <button class="di-tab" onclick="setMtgFilter('Partnership',this)">Partnership</button>
-        <button class="di-tab" onclick="setMtgFilter('Onboarding',this)">Onboarding</button>
-        <button class="di-tab" style="border-color:#f59e0b;color:#b45309" onclick="setMtgFilter('pending',this)">&#9888; Follow-Up</button>
-        <button class="di-tab" style="border-color:#6ee7b7;color:#059669" onclick="setMtgFilter('done',this)">&#10003; Done</button>
-      </div>
-      <div class="card" style="padding:0">
-        <div style="overflow-x:auto;overflow-y:auto;max-height:calc(100vh - 320px)">
-          <table class="di-table">
-            <thead><tr>
-              <th style="min-width:140px">Company</th>
-              <th style="min-width:180px">Meeting</th>
-              <th>Type</th>
-              <th>Date</th>
-              <th>Days Ago</th>
-              <th style="min-width:200px">Follow-Up</th>
-              <th>Link</th>
-            </tr></thead>
-            <tbody id="mtg-tbody"><tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">Loading...</td></tr></tbody>
-          </table>
+        <div class="card" style="padding:0">
+          <div style="overflow-x:auto;overflow-y:auto;max-height:calc(100vh - 320px)">
+            <table class="di-table">
+              <thead><tr>
+                <th style="min-width:140px">Company</th>
+                <th style="min-width:180px">Meeting</th>
+                <th>Type</th><th>Date</th><th>Days Ago</th>
+                <th style="min-width:200px">Follow-Up</th>
+                <th>Link</th>
+              </tr></thead>
+              <tbody id="mtg-tbody"></tbody>
+            </table>
+          </div>
+          <div id="mtg-footer" style="padding:10px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;gap:16px"></div>
         </div>
-        <div id="mtg-footer" style="padding:10px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;gap:16px"></div>
       </div>
     </div><div class="two-col"><div class="card"><div class="card-title">Closing May '26</div><div id="closing-month"></div></div><div class="card"><div class="card-title">Closing next 30 days</div><div id="closing-30d"></div></div></div><div class="card"><div class="card-title">Weighted pipeline</div><div id="forecast-list"></div></div></div>
   </div>
@@ -1540,7 +1540,11 @@ function switchTab(tab,el){
   const titles={summary:"Summary",pipeline:"Pipeline",leads:"Leads",stale:"Stale Accounts",inbound:"Inbound Leads",factors:"Factors AI Alerts",forecast:"Forecast",vpforecast:"VP Forecast Intelligence",meetings:"Meeting Intel",demostage:"Demo Stage",indiscussion:"In Discussion",futureprospect:"Future Prospect",closed:"Closed Accounts",engagements:"Forms & Engagement"};
   document.getElementById('page-title').textContent=titles[tab]||tab;
   renderCurrentTab();
-  setTimeout(function(){ renderCurrentTab(); }, 50);
+  setTimeout(function(){
+    renderCurrentTab();
+    if(tab==='meetings') renderMeetings();
+    if(tab==='vpforecast') doRenderVPF();
+  }, 100);
 }
 function setFilter(el,id){
   document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
