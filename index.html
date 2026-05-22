@@ -244,19 +244,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
   #user-badge:hover { background:rgba(0,212,160,0.15); }
 
 
-/* VP Forecast */
-.vpf-btn{font-size:11px;font-weight:500;padding:6px 16px;border-radius:8px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;transition:all 0.15s;white-space:nowrap}
-.vpf-btn:hover{border-color:var(--teal);color:var(--teal)}
-.vpf-btn.active{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:600}
-.vpf-btn.b0.active{background:#dc2626;border-color:#dc2626}
-.vpf-btn.b30.active{background:#ea580c;border-color:#ea580c}
-.vpf-btn.b50.active{background:#d97706;border-color:#d97706}
-.vpf-btn.b80.active{background:#16a34a;border-color:#16a34a}
-.vpf-btn.b100.active{background:#0d9e75;border-color:#0d9e75}
-.vpf-kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
-.vpf-kpi .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:500;margin-bottom:5px}
-.vpf-kpi .val{font-size:20px;font-weight:700;line-height:1.1}
-.vpf-kpi .sub{font-size:10px;color:var(--dim);margin-top:3px}
 .vpf-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap;display:inline-block}
 .b0x{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
 .b30x{background:#fff7ed;color:#ea580c;border:1px solid #fed7aa}
@@ -334,8 +321,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>Forms &amp; Engagement</div>
     <div class="nav-item" onclick="switchTab('forecast',this)">
       <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M3 17l6-6 4 4 8-8"/></svg>Forecast</div>
-    <div class="nav-item" onclick="switchTab('vpforecast',this);setTimeout(doRenderVPF,100)">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>VP Forecast</div>
+    
     
   </div>
   <div class="sidebar-bottom">
@@ -590,61 +576,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
     </div>
 
     <div class="tab-pane" id="tab-forecast" style="display:none"><div class="kpi-grid" id="forecast-kpis" style="grid-template-columns:repeat(4,1fr)"></div>
-    <div class="tab-pane" id="tab-vpforecast" style="display:none">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
-        <div>
-          <div style="font-size:14px;font-weight:700;color:var(--text)">VP Pipeline Intelligence</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">Expected closure &middot; Confidence bands &middot; MRR — May 19</div>
-        </div>
-        <div style="display:flex;gap:8px">
-          <select id="vpf-ae" onchange="renderVPF()" style="font-size:11px;padding:5px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text);cursor:pointer">
-            <option value="all">All AEs</option>
-            <option value="67333606">Archit</option>
-            <option value="160768701">Jace Larsen</option>
-            <option value="160575588">Liam Fallon</option>
-            <option value="160419465">Anmol Sehgal</option>
-          </select>
-          <select id="vpf-sort" onchange="renderVPF()" style="font-size:11px;padding:5px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text);cursor:pointer">
-            <option value="date">Close Date</option>
-            <option value="amount">Amount</option>
-            <option value="prob">Confidence</option>
-            <option value="mrr">MRR</option>
-          </select>
-        </div>
-      </div>
-      <div id="vpf-kpi-row" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px"><div class="kpi" style="grid-column:1/-1;text-align:center;color:var(--muted);font-size:12px">Loading...</div></div>
-      <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap">
-        <button class="vpf-btn active" id="vpfb-all" onclick="setVPFB('all',this)">All Deals</button>
-        <button class="vpf-btn b0" id="vpfb-0" onclick="setVPFB('0',this)">0–30% <span id="vpfn-0" style="font-size:10px;margin-left:2px"></span></button>
-        <button class="vpf-btn b30" id="vpfb-30" onclick="setVPFB('30',this)">30–50% <span id="vpfn-30" style="font-size:10px;margin-left:2px"></span></button>
-        <button class="vpf-btn b50" id="vpfb-50" onclick="setVPFB('50',this)">50–80% <span id="vpfn-50" style="font-size:10px;margin-left:2px"></span></button>
-        <button class="vpf-btn b80" id="vpfb-80" onclick="setVPFB('80',this)">80–100% <span id="vpfn-80" style="font-size:10px;margin-left:2px"></span></button>
-        <button class="vpf-btn b100" id="vpfb-100" onclick="setVPFB('100',this)">100% <span id="vpfn-100" style="font-size:10px;margin-left:2px"></span></button>
-      </div>
-      <div class="card" style="padding:0;overflow:hidden;margin-bottom:14px">
-        <div style="overflow-x:auto">
-          <table class="di-table">
-            <thead><tr>
-              <th>Dealership</th>
-              <th>AE Owner</th>
-              <th>Expected Closure</th>
-              <th>Closure Chances</th>
-              <th>Confidence Band</th>
-              <th>Deal Amount</th>
-              <th>MRR</th>
-              <th>Wtd Value</th>
-              <th>Link</th>
-            </tr></thead>
-            <tbody id="vpf-tbody"></tbody>
-          </table>
-        </div>
-        <div id="vpf-foot" style="padding:10px 16px;border-top:1px solid var(--border);background:#fafafa;font-size:11px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap"></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Probability-Weighted Pipeline by AE</div>
-        <div id="vpf-ae-bars"></div>
-      </div>
-    </div>
+    
     <div class="two-col"><div class="card"><div class="card-title">Closing May '26</div><div id="closing-month"></div></div><div class="card"><div class="card-title">Closing next 30 days</div><div id="closing-30d"></div></div></div><div class="card"><div class="card-title">Weighted pipeline</div><div id="forecast-list"></div></div></div>
   </div>
 </div>
@@ -1473,12 +1405,11 @@ function switchTab(tab,el){
   var cEl=document.querySelector('.content'); if(cEl) cEl.scrollTop=0;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(el)el.classList.add('active');
-  const titles={summary:"Summary",pipeline:"Pipeline",leads:"Leads",stale:"Stale Accounts",inbound:"Inbound Leads",factors:"Factors AI Alerts",forecast:"Forecast",vpforecast:"VP Forecast Intelligence",demostage:"Demo Stage",indiscussion:"In Discussion",futureprospect:"Future Prospect",closed:"Closed Accounts",engagements:"Forms & Engagement"};
+  const titles={summary:"Summary",pipeline:"Pipeline",leads:"Leads",stale:"Stale Accounts",inbound:"Inbound Leads",factors:"Factors AI Alerts",forecast:"Forecast",demostage:"Demo Stage",indiscussion:"In Discussion",futureprospect:"Future Prospect",closed:"Closed Accounts",engagements:"Forms & Engagement"};
   document.getElementById('page-title').textContent=titles[tab]||tab;
   renderCurrentTab();
   setTimeout(function(){
     renderCurrentTab();
-    if(tab==='vpforecast') doRenderVPF();
   }, 100);
 }
 function setFilter(el,id){
@@ -1486,19 +1417,12 @@ function setFilter(el,id){
   el.classList.add('active');activeFilter=id;renderCurrentTab();
 
   
-  // Force render vpforecast tab when it becomes visible
-  var vpPane = document.getElementById('tab-vpforecast');
-  if(vpPane && window.MutationObserver) {
-    var vpObs = new MutationObserver(function(muts) {
-      muts.forEach(function(m) {
-        if(m.attributeName === 'style' && vpPane.style.display !== 'none') {
-          setTimeout(doRenderVPF, 50);
+    var   if(    var       muts.forEach(function(m) {
+        if(m.attributeName === 'style' &&           setTimeout(doRenderVPF, 50);
         }
       });
     });
-    vpObs.observe(vpPane, {attributes: true, attributeFilter: ['style']});
-  }
-}
+    }
 function renderCurrentTab(){
   // After render, re-apply user filter restrictions
   if(currentUser && currentUser.role !== 'lead') {
@@ -1507,7 +1431,7 @@ function renderCurrentTab(){
     }, 10);
   }
 
-  const r={summary:renderSummary,pipeline:renderPipeline,leads:renderLeads,stale:renderStale,inbound:renderInboundLeads,factors:renderFactors,forecast:renderForecast,vpforecast:renderVPF,demostage:renderDemoStage,indiscussion:renderInDiscussion,futureprospect:renderFutureProspect,closed:renderClosed,engagements:renderEngagements};
+  const r={summary:renderSummary,pipeline:renderPipeline,leads:renderLeads,stale:renderStale,inbound:renderInboundLeads,factors:renderFactors,forecast:renderForecast,demostage:renderDemoStage,indiscussion:renderInDiscussion,futureprospect:renderFutureProspect,closed:renderClosed,engagements:renderEngagements};
   if(r[currentTab]) { try { r[currentTab](); } catch(e) { console.error('RENDER ERROR tab='+currentTab, e.message, e.stack); } }
 }
 function dealRow(d,showProb=false){
@@ -2234,231 +2158,10 @@ function runLocalSearch(q) {
 
 
 
-var FORECAST_DEALS=[
-  {id:"325649364686",n:"North Park Lincoln CI Upsell",a:19200,s:"1534611154",o:"67333606",c:"2026-05-30",prob:50,mrr:1600,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/325649364686"},
-  {id:"325251326686",n:"Mclaren North Jersey",a:19200,s:"1534611154",o:"67333606",c:"2026-05-30",prob:50,mrr:1600,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/325251326686"},
-  {id:"324818101948",n:"Sansone Hyundai",a:38400,s:"1534611154",o:"67333606",c:"2026-05-31",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/324818101948"},
-  {id:"324965554927",n:"Steve White Auto Group",a:18000,s:"1534611154",o:"67333606",c:"2026-05-31",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/324965554927"},
-  {id:"324282753778",n:"Scarboro Mazda",a:19200,s:"1534611154",o:"67333606",c:"2026-05-31",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/324282753778"},
-  {id:"324965552857",n:"Scarboro Mazda Studio",a:6000,s:"1534611154",o:"67333606",c:"2026-05-31",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/324965552857"},
-  {id:"325178999496",n:"Kernersville CDJR",a:8400,s:"1534611154",o:"160673631",c:"2026-05-31",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/325178999496"},
-  {id:"324289275616",n:"Kemna Auto - Vini",a:12000,s:"1534611154",o:"160768701",c:"2026-05-30",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/324289275616"},
-  {id:"324281349835",n:"Curry Acura - Vini",a:9600,s:"1534611154",o:"67333606",c:"2026-05-30",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/324281349835"},
-  {id:"323519182575",n:"Kernersville CDJR - Convo",a:9600,s:"1534611154",o:"160419465",c:"2026-05-30",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/323519182575"},
-  {id:"324802793148",n:"terryk@southbank.ca",a:7200,s:"1534611154",o:"67333606",c:"",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/324802793148"},
-  {id:"269511857913",n:"Fairway Lincoln",a:53976,s:"1534611154",o:"160768701",c:"2026-01-31",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/269511857913"},
-  {id:"322910637754",n:"North Coast Mitsubishi",a:48000,s:"1534611154",o:"160419465",c:"2026-04-30",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/322910637754"},
-  {id:"296273418999",n:"Northstar Kia",a:45600,s:"1534611154",o:"160768701",c:"2026-02-28",prob:50,mrr:0,acv:3800,url:"https://app.hubspot.com/contacts/242626590/record/0-3/296273418999"},
-  {id:"296279899873",n:"Heights Nissan - Convo",a:45600,s:"1534611154",o:"160768701",c:"2026-02-28",prob:50,mrr:0,acv:3800,url:"https://app.hubspot.com/contacts/242626590/record/0-3/296279899873"},
-  {id:"271450837707",n:"Dorsett Automotive - VINI",a:43200,s:"1534611154",o:"67333606",c:"",prob:50,mrr:0,acv:12900,url:"https://app.hubspot.com/contacts/242626590/record/0-3/271450837707"},
-  {id:"320535940837",n:"Grupo EBD",a:34800,s:"1534611154",o:"160419465",c:"2026-04-29",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/320535940837"},
-  {id:"259790918393",n:"Imperial Cars - CI Deal",a:19200,s:"1534611154",o:"67333606",c:"2026-01-30",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/259790918393"},
-  {id:"523526991554",n:"Palladino Honda",a:18000,s:"1534611154",o:"67333606",c:"2026-05-30",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/523526991554"},
-  {id:"322525159098",n:"Shea Auto Group - Convo",a:144000,s:"1534611154",o:"160575588",c:"",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/322525159098"},
-  {id:"287746674373",n:"Car Revolution",a:72000,s:"1534611154",o:"160768701",c:"2026-05-13",prob:50,mrr:0,acv:3000,url:"https://app.hubspot.com/contacts/242626590/record/0-3/287746674373"},
-  {id:"301218086612",n:"Car Revolutions - Studio",a:12000,s:"1534611154",o:"160768701",c:"2026-05-13",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/301218086612"},
-  {id:"320490442456",n:"O.C. Welch Ford Lincoln",a:12000,s:"1534611154",o:"160419465",c:"2026-04-30",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/320490442456"},
-  {id:"244270880457",n:"Kelowna Ford and Lincoln",a:5988,s:"1534611154",o:"160419465",c:"",prob:50,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/244270880457"},
-  {id:"287746682568",n:"Honda of Downtown LA",a:216000,s:"1534611164",o:"160575588",c:"2026-02-05",prob:90,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/287746682568"},
-  {id:"299410044629",n:"Principle Auto Group",a:201600,s:"1534611164",o:"160768701",c:"2026-05-08",prob:90,mrr:0,acv:16800,url:"https://app.hubspot.com/contacts/242626590/record/0-3/299410044629"},
-  {id:"231155101416",n:"DeNooyer Chevrolet",a:40800,s:"1534611164",o:"160575588",c:"2026-01-20",prob:90,mrr:0,acv:999,url:"https://app.hubspot.com/contacts/242626590/record/0-3/231155101416"},
-  {id:"310409555693",n:"Speck Dealership",a:36000,s:"1534611164",o:"160419465",c:"2026-03-09",prob:90,mrr:0,acv:3000,url:"https://app.hubspot.com/contacts/242626590/record/0-3/310409555693"},
-  {id:"239542580962",n:"Skip The Dealerships",a:9588,s:"1534611164",o:"160419465",c:"2026-01-16",prob:90,mrr:0,acv:799,url:"https://app.hubspot.com/contacts/242626590/record/0-3/239542580962"},
-  {id:"317997675235",n:"Pee Dee Auto Sales",a:6000,s:"1534611164",o:"160768701",c:"2026-03-27",prob:90,mrr:0,acv:6000,url:"https://app.hubspot.com/contacts/242626590/record/0-3/317997675235"},
-  {id:"302768805602",n:"Honda of Reseda",a:6600,s:"1534611164",o:"160575588",c:"2026-03-24",prob:90,mrr:0,acv:550,url:"https://app.hubspot.com/contacts/242626590/record/0-3/302768805602"},
-  {id:"296272704230",n:"Integrity Auto Sales",a:6000,s:"1534611164",o:"160575588",c:"2026-02-23",prob:90,mrr:0,acv:6000,url:"https://app.hubspot.com/contacts/242626590/record/0-3/296272704230"},
-  {id:"296274141934",n:"Mb Motors LLC NADA",a:3000,s:"1534611164",o:"160575588",c:"2026-02-18",prob:90,mrr:0,acv:750,url:"https://app.hubspot.com/contacts/242626590/record/0-3/296274141934"},
-  {id:"295077102287",n:"Greater Chicago Motors",a:3660,s:"1534611164",o:"160419465",c:"2026-02-12",prob:90,mrr:0,acv:305,url:"https://app.hubspot.com/contacts/242626590/record/0-3/295077102287"},
-  {id:"310407374573",n:"Auto Smart LLC",a:3660,s:"1534611164",o:"160419465",c:"2026-03-04",prob:90,mrr:0,acv:305,url:"https://app.hubspot.com/contacts/242626590/record/0-3/310407374573"},
-  {id:"322444849867",n:"RC Hill Honda Powersports",a:5400,s:"1534611164",o:"160768701",c:"2026-04-27",prob:90,mrr:0,acv:5400,url:"https://app.hubspot.com/contacts/242626590/record/0-3/322444849867"},
-  {id:"315161531080",n:"Silver Line Auto Group",a:6000,s:"1534611164",o:"160768701",c:"2026-03-10",prob:90,mrr:0,acv:6000,url:"https://app.hubspot.com/contacts/242626590/record/0-3/315161531080"},
-  {id:"203838421748",n:"Yonkers Auto Gallery",a:7800,s:"1534611164",o:"67333606",c:"2025-10-30",prob:90,mrr:0,acv:1300,url:"https://app.hubspot.com/contacts/242626590/record/0-3/203838421748"},
-  {id:"168988265161",n:"Vatland Honda",a:8400,s:"1534611164",o:"67333606",c:"2025-09-30",prob:90,mrr:0,acv:600,url:"https://app.hubspot.com/contacts/242626590/record/0-3/168988265161"},
-  {id:"145845288642",n:"Curry Acura",a:4800,s:"1534611164",o:"67333606",c:"2025-09-04",prob:90,mrr:0,acv:400,url:"https://app.hubspot.com/contacts/242626590/record/0-3/145845288642"},
-  {id:"147454763725",n:"Car Bazaar of Pensacola",a:6000,s:"1534611164",o:"67333606",c:"2025-09-04",prob:90,mrr:0,acv:500,url:"https://app.hubspot.com/contacts/242626590/record/0-3/147454763725"},
-  {id:"146097909463",n:"Carma Automotive Group",a:4800,s:"1534611164",o:"67333606",c:"2025-09-02",prob:90,mrr:0,acv:400,url:"https://app.hubspot.com/contacts/242626590/record/0-3/146097909463"},
-  {id:"155364978364",n:"Tims Truck Capital",a:14400,s:"1534611164",o:"67333606",c:"2025-09-12",prob:90,mrr:0,acv:800,url:"https://app.hubspot.com/contacts/242626590/record/0-3/155364978364"},
-  {id:"307163414219",n:"Murgado MB Foothill Ranch - CI",a:100752,s:"1534611162",o:"160575588",c:"2026-03-09",prob:90,mrr:0,acv:15000,url:"https://app.hubspot.com/contacts/242626590/record/0-3/307163414219"},
-  {id:"307170888394",n:"Murgado MB Studio",a:14400,s:"1534611162",o:"160575588",c:"2026-03-09",prob:90,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/307170888394"},
-  {id:"285661472473",n:"Heiser Chevrolet West Allis",a:9600,s:"1534611162",o:"160575588",c:"2026-04-10",prob:90,mrr:0,acv:800,url:"https://app.hubspot.com/contacts/242626590/record/0-3/285661472473"},
-  {id:"232556633802",n:"Feldmann Imports Mercedes-Benz",a:93000,s:"1534611162",o:"67333606",c:"2025-12-08",prob:90,mrr:0,acv:7750,url:"https://app.hubspot.com/contacts/242626590/record/0-3/232556633802"},
-  {id:"323518351037",n:"CarLux Fort Myers - Studio",a:6300,s:"1534611162",o:"160768701",c:"2026-05-05",prob:90,mrr:0,acv:6300,url:"https://app.hubspot.com/contacts/242626590/record/0-3/323518351037"},
-  {id:"171515426513",n:"McLaren North Jersey (old)",a:6000,s:"1534611162",o:"67333606",c:"2025-09-29",prob:90,mrr:0,acv:500,url:"https://app.hubspot.com/contacts/242626590/record/0-3/171515426513"},
-  {id:"275926886121",n:"Jeffreys Auto Exchange",a:3588,s:"1534611162",o:"160768701",c:"2026-02-24",prob:90,mrr:0,acv:3588,url:"https://app.hubspot.com/contacts/242626590/record/0-3/275926886121"},
-  {id:"267213812413",n:"Perkins Motors NADA - Studio",a:5388,s:"1534611162",o:"160768701",c:"2026-02-23",prob:90,mrr:0,acv:5388,url:"https://app.hubspot.com/contacts/242626590/record/0-3/267213812413"},
-  {id:"307175361219",n:"Anderson Auto Group - Convo",a:172800,s:"1534611159",o:"67333606",c:"2026-03-31",prob:30,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/307175361219"},
-  {id:"320212951779",n:"Airport Marina Honda",a:81576,s:"1534611159",o:"160575588",c:"",prob:30,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/320212951779"},
-  {id:"322911412980",n:"Central Auto Inc.",a:18000,s:"1534611159",o:"160419465",c:"",prob:30,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/322911412980"},
-  {id:"315764835016",n:"Dralle Chevrolet Buick GMC",a:17988,s:"1534611159",o:"160768701",c:"2026-05-29",prob:30,mrr:0,acv:2000,url:"https://app.hubspot.com/contacts/242626590/record/0-3/315764835016"},
-  {id:"293273243346",n:"Tenvoorde Ford",a:9600,s:"1534611159",o:"67333606",c:"2026-02-27",prob:30,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/293273243346"},
-  {id:"203233601240",n:"Anderson Ford South",a:9600,s:"1534611159",o:"67333606",c:"2025-10-31",prob:30,mrr:0,acv:0,url:"https://app.hubspot.com/contacts/242626590/record/0-3/203233601240"}
-];
 
 
-let _vpfBand = 'all';
-function setVPFB(band, el) {
-  _vpfBand = band;
-  ['all','0','30','50','80','100'].forEach(function(b) {
-    var btn = document.getElementById('vpfb-'+b);
-    if(btn) btn.classList.remove('active');
-  });
-  if(el) el.classList.add('active');
-  doRenderVPF();
-}
 
-function renderVPF() { doRenderVPF(); }
 
-function doRenderVPF() {
-  if(typeof FORECAST_DEALS === 'undefined' || !FORECAST_DEALS || !FORECAST_DEALS.length) return;
-
-  var kpiEl   = document.getElementById('vpf-kpi-row');
-  var tbody   = document.getElementById('vpf-tbody');
-  var footEl  = document.getElementById('vpf-foot');
-  var barsEl  = document.getElementById('vpf-ae-bars');
-  if(!tbody) return;
-
-  // Filters
-  var aeEl   = document.getElementById('vpf-ae');
-  var sortEl = document.getElementById('vpf-sort');
-  var aeFilter = aeEl ? aeEl.value : 'all';
-  var sortBy   = sortEl ? sortEl.value : 'date';
-
-  // Base data — role filter
-  var base = FORECAST_DEALS.slice();
-  if(currentUser && currentUser.role !== 'lead') {
-    base = base.filter(function(d){ return d.o === currentUser.id; });
-  } else if(aeFilter !== 'all') {
-    base = base.filter(function(d){ return d.o === aeFilter; });
-  }
-
-  // Band counts
-  var counts = {0:0,30:0,50:0,80:0,100:0};
-  base.forEach(function(d){
-    if(d.prob === 100) counts[100]++;
-    else if(d.prob >= 80) counts[80]++;
-    else if(d.prob >= 50) counts[50]++;
-    else if(d.prob >= 30) counts[30]++;
-    else counts[0]++;
-  });
-  ['0','30','50','80','100'].forEach(function(b){
-    var el = document.getElementById('vpfn-'+b);
-    if(el) el.textContent = '(' + counts[parseInt(b)] + ')';
-  });
-
-  // Band filter
-  var deals = base;
-  if(_vpfBand === '0')   deals = base.filter(function(d){ return d.prob < 30; });
-  else if(_vpfBand === '30') deals = base.filter(function(d){ return d.prob >= 30 && d.prob < 50; });
-  else if(_vpfBand === '50') deals = base.filter(function(d){ return d.prob >= 50 && d.prob < 80; });
-  else if(_vpfBand === '80') deals = base.filter(function(d){ return d.prob >= 80 && d.prob < 100; });
-  else if(_vpfBand === '100') deals = base.filter(function(d){ return d.prob === 100; });
-
-  // Sort
-  deals = deals.slice();
-  if(sortBy === 'date') deals.sort(function(a,b){ if(!a.c&&!b.c)return 0; if(!a.c)return 1; if(!b.c)return -1; return new Date(a.c)-new Date(b.c); });
-  else if(sortBy === 'amount') deals.sort(function(a,b){ return b.a - a.a; });
-  else if(sortBy === 'prob') deals.sort(function(a,b){ return b.prob - a.prob; });
-  else if(sortBy === 'mrr') deals.sort(function(a,b){ return (b.mrr||0)-(a.mrr||0); });
-
-  // KPIs
-  var totalPipe = base.reduce(function(s,d){return s+d.a;},0);
-  var wtdPipe   = Math.round(base.reduce(function(s,d){return s+(d.a*d.prob/100);},0));
-  var mrrPipe   = base.reduce(function(s,d){return s+(d.mrr||0);},0);
-  var highAmt   = base.filter(function(d){return d.prob>=80;}).reduce(function(s,d){return s+d.a;},0);
-  var now       = new Date();
-  var mayAmt    = base.filter(function(d){return d.c && d.c.slice(0,7)==='2026-05';}).reduce(function(s,d){return s+d.a;},0);
-
-  function fmt(n){ if(!n)return'$0'; if(n>=1e6)return'$'+(n/1e6).toFixed(1)+'M'; if(n>=1e3)return'$'+Math.round(n/1e3)+'K'; return'$'+n.toLocaleString(); }
-  function clr(c){ return OWNER_COLORS[c]||'#6b7280'; }
-  function oname(c){ return OWNERS[c]||c; }
-
-  if(kpiEl) kpiEl.innerHTML = [
-    ['Total Pipeline', fmt(totalPipe), base.length+' deals', 'var(--teal)'],
-    ['Weighted Forecast', fmt(wtdPipe), 'prob-adjusted', '#2563eb'],
-    ['Closing May', fmt(mayAmt), base.filter(function(d){return d.c&&d.c.slice(0,7)==='2026-05';}).length+' deals', '#d97706'],
-    ['80–100% Confident', fmt(highAmt), counts[80]+counts[100]+' deals', '#16a34a'],
-    ['MRR Pipeline', mrrPipe>0?'$'+mrrPipe.toLocaleString()+'/mo':'-', mrrPipe>0?'monthly recurring':'no MRR data', '#7c3aed'],
-  ].map(function(k){
-    return '<div class="kpi"><div class="kpi-label">'+k[0]+'</div><div class="kpi-val" style="color:'+k[3]+'">'+k[1]+'</div><div class="kpi-sub">'+k[2]+'</div></div>';
-  }).join('');
-
-  function bb(p){
-    if(p===100) return '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:#e6f7f2;color:#0d9e75;border:1px solid #6ee7c7">✓ 100%</span>';
-    if(p>=80)   return '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0">80–100%</span>';
-    if(p>=50)   return '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:#fffbeb;color:#d97706;border:1px solid #fde68a">50–80%</span>';
-    if(p>=30)   return '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:#fff7ed;color:#ea580c;border:1px solid #fed7aa">30–50%</span>';
-    return '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:#fef2f2;color:#dc2626;border:1px solid #fecaca">0–30%</span>';
-  }
-
-  function cbar(p){
-    var c = p>=80?'#16a34a':p>=50?'#d97706':p>=30?'#ea580c':'#dc2626';
-    return '<div style="display:flex;align-items:center;gap:6px"><div style="width:80px;height:6px;border-radius:3px;background:#e5e7eb;overflow:hidden;display:inline-block;vertical-align:middle"><div style="width:'+p+'%;height:100%;background:'+c+'"></div></div><span style="font-size:11px;font-weight:700;color:'+c+'">'+p+'%</span></div>';
-  }
-
-  var rows = deals.map(function(d){
-    var oc = clr(d.o);
-    var wtd = Math.round(d.a*d.prob/100);
-    var dt = d.c ? new Date(d.c) : null;
-    var cs = dt ? dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'}) : '—';
-    var days = dt ? Math.ceil((dt-new Date())/86400000) : null;
-    var urg = '';
-    if(days !== null){
-      if(days<0) urg='<span style="font-size:9px;background:#fef2f2;color:#dc2626;border:1px solid #fecaca;padding:1px 5px;border-radius:4px;margin-left:4px">Overdue</span>';
-      else if(days<=7) urg='<span style="font-size:9px;background:#fff7ed;color:#ea580c;border:1px solid #fed7aa;padding:1px 5px;border-radius:4px;margin-left:4px">'+days+'d left</span>';
-      else if(days<=30) urg='<span style="font-size:9px;background:#fffbeb;color:#d97706;border:1px solid #fde68a;padding:1px 5px;border-radius:4px;margin-left:4px">'+days+'d</span>';
-    }
-    return '<tr>'
-      +'<td style="font-weight:600;color:var(--text);max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+d.n+'">'+d.n+'</td>'
-      +'<td style="font-size:11px;font-weight:600;color:'+oc+';white-space:nowrap">'+oname(d.o)+'</td>'
-      +'<td style="font-size:11px;white-space:nowrap">'+cs+urg+'</td>'
-      +'<td>'+cbar(d.prob)+'</td>'
-      +'<td>'+bb(d.prob)+'</td>'
-      +'<td style="font-weight:700;color:var(--teal)">'+fmt(d.a)+'</td>'
-      +'<td style="font-size:11px;font-weight:600;color:#7c3aed">'+(d.mrr>0?'$'+d.mrr.toLocaleString()+'/mo':'—')+'</td>'
-      +'<td style="font-size:11px;font-weight:600;color:#2563eb">'+fmt(wtd)+'</td>'
-      +'<td><a href="'+d.url+'" target="_blank" class="hs-link">&#8599;</a></td>'
-    +'</tr>';
-  }).join('');
-
-  tbody.innerHTML = rows || '<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--dim)">No deals</td></tr>';
-
-  if(footEl){
-    var fv=deals.reduce(function(s,d){return s+d.a;},0);
-    var fw=Math.round(deals.reduce(function(s,d){return s+d.a*d.prob/100;},0));
-    var fm=deals.reduce(function(s,d){return s+(d.mrr||0);},0);
-    footEl.innerHTML='<span>'+deals.length+' deals</span><span>Total: <strong style="color:var(--teal)">'+fmt(fv)+'</strong></span><span>Weighted: <strong style="color:#2563eb">'+fmt(fw)+'</strong></span>'+(fm>0?'<span>MRR: <strong style="color:#7c3aed">$'+fm.toLocaleString()+'/mo</strong></span>':'');
-  }
-
-  if(barsEl){
-    var AES=['67333606','160768701','160575588','160419465'];
-    var barRows=AES.map(function(id){
-      var ds=base.filter(function(d){return d.o===id;});
-      var pipe=ds.reduce(function(s,d){return s+d.a;},0);
-      var wtd2=Math.round(ds.reduce(function(s,d){return s+d.a*d.prob/100;},0));
-      var mrr2=ds.reduce(function(s,d){return s+(d.mrr||0);},0);
-      return {id:id,name:oname(id),pipe:pipe,wtd:wtd2,mrr:mrr2,cnt:ds.length};
-    }).filter(function(r){return r.pipe>0;}).sort(function(a,b){return b.pipe-a.pipe;});
-    var maxP=Math.max.apply(null,barRows.map(function(r){return r.pipe;})||[1]);
-    barsEl.innerHTML=barRows.map(function(r){
-      var c=clr(r.id);
-      var pct=Math.round(r.pipe/maxP*100);
-      var wPct=Math.round(r.wtd/maxP*100);
-      return '<div style="margin-bottom:14px">'
-        +'<div style="display:flex;justify-content:space-between;margin-bottom:5px;flex-wrap:wrap;gap:6px">'
-        +'<span style="font-size:12px;font-weight:600;color:'+c+'">'+r.name+'</span>'
-        +'<div style="display:flex;gap:12px;font-size:11px">'
-        +'<span>Pipeline: <strong style="color:var(--teal)">'+fmt(r.pipe)+'</strong></span>'
-        +'<span>Weighted: <strong style="color:#2563eb">'+fmt(r.wtd)+'</strong></span>'
-        +(r.mrr>0?'<span>MRR: <strong style="color:#7c3aed">$'+r.mrr.toLocaleString()+'/mo</strong></span>':'')
-        +'<span style="color:var(--muted)">'+r.cnt+' deals</span>'
-        +'</div></div>'
-        +'<div style="position:relative;height:8px;background:var(--border);border-radius:4px;overflow:hidden">'
-        +'<div style="position:absolute;height:100%;width:'+pct+'%;background:'+c+';opacity:0.2;border-radius:4px"></div>'
-        +'<div style="position:absolute;height:100%;width:'+wPct+'%;background:'+c+';border-radius:4px"></div>'
-        +'</div></div>';
-    }).join('') || '<div class="empty">No data</div>';
-  }
-}
 
 
 
