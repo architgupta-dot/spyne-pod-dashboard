@@ -1412,6 +1412,7 @@ function switchTab(tab,el){
 function setFilter(el,id){
   document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
   el.classList.add('active');activeFilter=id;renderCurrentTab();
+}
 
 function renderCurrentTab(){
   // After render, re-apply user filter restrictions
@@ -2169,7 +2170,6 @@ function setMeetingFilter(f, el) {
 function toggleFollowUp(id) {
   _meetingDone[id] = !_meetingDone[id];
   renderMeetings();
-}
 }</script>
 
 
