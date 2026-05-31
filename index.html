@@ -283,7 +283,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
 <div class="sidebar">
   <div class="sidebar-logo">
     <div class="brand">Spyne POD</div>
-    <div class="sub">Refreshed May 30 &middot; Live</div>
+    <div class="sub">Refreshed May 31 &middot; Live</div>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label">Analytics</div>
@@ -406,7 +406,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
     <div class="tab-pane" id="tab-factors" style="display:none">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
         <span class="badge b-demo" style="font-size:11px;padding:5px 12px">&#9889; Factors AI — Website Visitor Alerts</span>
-        <span style="font-size:11px;color:var(--muted)">Live from #team-archie Slack · Refreshed May 30</span>
+        <span style="font-size:11px;color:var(--muted)">Live from #team-archie Slack · Refreshed May 31</span>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px">
@@ -1377,7 +1377,7 @@ function tabFiltered(arr,tab,key='o'){
 
 let activeFilter='all';
 let currentTab='summary';
-const TODAY=new Date("2026-05-30");
+const TODAY=new Date("2026-05-31");
 const daysSince=d=>d?Math.floor((TODAY-new Date(d))/864e5):999;
 const fmtAmt=a=>!a?'—':a>=1e6?'$'+(a/1e6).toFixed(1)+'M':a>=1e3?'$'+(a/1e3).toFixed(a%1e3===0?0:1)+'K':'$'+a;
 const fmtDate=s=>{if(!s)return'—';const d=new Date(s);return(d.getMonth()+1)+'/'+(d.getDate());};
@@ -1570,7 +1570,7 @@ function renderForecast(){
   const active=deals.filter(d=>ACTIVE.has(d.s));
   const pipe=active.reduce((s,d)=>s+(d.a||0),0);
   const weighted=active.reduce((s,d)=>s+(d.a||0)*prob(d),0);
-  const now=new Date("2026-05-30"),endMay=new Date("2026-05-31"),end30=new Date("2026-06-08");
+  const now=new Date("2026-05-31"),endMay=new Date("2026-05-31"),end30=new Date("2026-06-08");
   const closingMay=deals.filter(d=>{if(!d.c)return false;const dd=new Date(d.c);return dd>=now&&dd<=endMay;});
   const closing30=deals.filter(d=>{if(!d.c)return false;const dd=new Date(d.c);return dd>=now&&dd<=end30;});
   document.getElementById('forecast-kpis').innerHTML=`
@@ -1734,6 +1734,13 @@ function renderFutureProspect() {
 }
 
 const FACTORS_DATA=[
+{date:"May 29",company:"Bramgate Automotive",domain:"bramgateautomotive.com",owner:"Vaibhav Kumar",deal:"",page:"www.spyne.ai/blogs/chatgpt-for-the-automotive-industry",factors_url:"https://app.factors.ai/profiles/accounts/ZG9tLU1pMWljbUF0WjJGMFpXRjFkRzl0YjNScGRtVXVZMjl0?group=$domains&view=birdview",pod_member:"Archit Gupta"},
+{date:"May 29",company:"Baril Ford",domain:"barilford.com",owner:"Vaibhav Kumar",deal:"",page:"www.spyne.ai/fr/tools/trailer-vin-decoder",factors_url:"https://app.factors.ai/profiles/accounts/ZG9tLU1pMWliWVJwYkdadmNtUXVZMjl0?group=$domains&view=birdview",pod_member:"Archit Gupta"},
+{date:"May 29",company:"BMW Fresno",domain:"bmwfresno.com",owner:"Vaibhav Kumar",deal:"",page:"www.spyne.ai/contact-us",factors_url:"https://app.factors.ai/profiles/accounts/ZG9tLU1pMWliWGRtY21WemJtOHVZMjl0?group=$domains&view=birdview",pod_member:"Archit Gupta"},
+{date:"May 29",company:"BMW London",domain:"bmwlondon.ca",owner:"Vaibhav Kumar",deal:"",page:"www.spyne.ai/blogs/cinematic-car-videos",factors_url:"https://app.factors.ai/profiles/accounts/ZG9tLU1pMWliWGRzYjI1a2IyNHVZMkU5?group=$domains&view=birdview",pod_member:"Archit Gupta"},
+{date:"May 29",company:"Bourgeois Midland Nissan",domain:"bourgeoisnissan.com",owner:"Vaibhav Kumar",deal:"",page:"www.spyne.ai/blogs/car-dealership-advertising",factors_url:"https://app.factors.ai/profiles/accounts/ZG9tLU1pMWliM1Z5Wm1WdmFYTnVhWE56WVc0dVkyOXQ=?group=$domains&view=birdview",pod_member:"Archit Gupta"},
+{date:"May 29",company:"Davidson Auto Group",domain:"davidsonautonet.com",owner:"Archit Gupta",deal:"Davidson Auto Group",page:"console.spyne.ai/home",factors_url:"https://app.factors.ai/profiles/accounts/ZG9tLU1pMWtZWFpwWkhOdmJtRjFkRzl1WlhRdVkyOXQ=?group=$domains&view=birdview",pod_member:"Archit Gupta"},
+{date:"May 29",company:"Curry Auto Group",domain:"curryauto.com",owner:"Archit Gupta",deal:"",page:"www.spyne.ai",factors_url:"https://app.factors.ai/profiles/accounts/ZG9tLU1pMWpkWEp5ZVdGMWRHOHVZMjl0?group=$domains&view=birdview",pod_member:"Archit Gupta"},
 {date:"May 30",company:"Central Chevrolet",domain:"centralchevyauto.com",owner:"Anmol Sehgal",deal:"Central Auto Inc.",page:"www.spyne.ai/conversational-ai",factors_url:"https://app.factors.ai/profiles/accounts/ZG9tLU1pMWpaVzUwY21Gc1kyaGxkbmxoZFhSdkxtTnZiUT09?group=$domains&view=birdview",pod_member:"Anmol Sehgal"},
 {date:"May 29",company:"Brian Jessel BMW",domain:"brianjesselbmw.com",owner:"Vaibhav Kumar",deal:"",page:"www.spyne.ai/blogs/car-salesman-advertising",factors_url:"https://app.factors.ai/profiles/accounts/ZG9tLU1pMWljbWxoYm1wbGMzTmxiR0p0ZHk1amIyMD0=?group=$domains&view=birdview",pod_member:"Archit Gupta"},
 {date:"May 29",company:"Curry Subaru Kingston",domain:"currysubarukingston.com",owner:"Archit Gupta",deal:"Curry Subaru Kingston",page:"www.spyne.ai/product-demo",factors_url:"https://app.factors.ai/profiles/accounts/ZG9tLU1pMWpkWEp5ZVhOMVltRnlkV3RwYm1kemRHOXVMbU52YlE5PQ==?group=$domains&view=birdview",pod_member:"Archit Gupta"},
