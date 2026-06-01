@@ -283,7 +283,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
 <div class="sidebar">
   <div class="sidebar-logo">
     <div class="brand">Spyne POD</div>
-    <div class="sub">Refreshed May 31 &middot; Live</div>
+    <div class="sub">Refreshed Jun 1 &middot; Live</div>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label">Analytics</div>
@@ -365,7 +365,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
   </div>
   <div class="content">
     <div class="tab-pane active" id="tab-summary"><div class="kpi-grid" id="kpi-grid"></div><div class="two-col"><div class="card"><div class="card-title">Pipeline by owner</div><div id="ae-bars"></div></div><div class="card"><div class="card-title">Pipeline by stage</div><div id="stage-bars"></div></div></div><div class="card"><div class="card-title">Top active deals</div><div id="summary-deals"></div></div></div>
-    <div class="tab-pane" id="tab-pipeline" style="display:none"><div class="card"><div class="card-title">All active deals &mdash; May 31, 2026</div><input class="search-bar" id="deal-search" type="text" placeholder="Search dealership name..."><div id="all-deals"></div></div></div>
+    <div class="tab-pane" id="tab-pipeline" style="display:none"><div class="card"><div class="card-title">All active deals &mdash; Jun 1, 2026</div><input class="search-bar" id="deal-search" type="text" placeholder="Search dealership name..."><div id="all-deals"></div></div></div>
     <div class="tab-pane" id="tab-stale" style="display:none">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
         <span class="badge b-stale" style="font-size:11px;padding:5px 12px">&#9888; Stale Accounts — No Follow-up 15+ Days</span>
@@ -381,7 +381,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
     </div>
     <div class="tab-pane" id="tab-inbound" style="display:none">
       <div style="margin-bottom:14px">
-        <span class="badge b-discuss" style="font-size:11px;padding:5px 12px">&#128229; Inbound Leads — Last 30 Days · May 26</span>
+        <span class="badge b-discuss" style="font-size:11px;padding:5px 12px">&#128229; Inbound Leads — Last 30 Days · Jun 1</span>
         <span id="inbound-count-label" style="font-size:11px;color:var(--muted);margin-left:10px"></span>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
@@ -406,7 +406,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:13
     <div class="tab-pane" id="tab-factors" style="display:none">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
         <span class="badge b-demo" style="font-size:11px;padding:5px 12px">&#9889; Factors AI — Website Visitor Alerts</span>
-        <span style="font-size:11px;color:var(--muted)">Live from #team-archie Slack · Refreshed May 31</span>
+        <span style="font-size:11px;color:var(--muted)">Live from #team-archie Slack · Refreshed Jun 1</span>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px">
@@ -1386,7 +1386,7 @@ function tabFiltered(arr,tab,key='o'){
 
 let activeFilter='all';
 let currentTab='summary';
-const TODAY=new Date("2026-05-31");
+const TODAY=new Date("2026-06-01");
 const daysSince=d=>d?Math.floor((TODAY-new Date(d))/864e5):999;
 const fmtAmt=a=>!a?'—':a>=1e6?'$'+(a/1e6).toFixed(1)+'M':a>=1e3?'$'+(a/1e3).toFixed(a%1e3===0?0:1)+'K':'$'+a;
 const fmtDate=s=>{if(!s)return'—';const d=new Date(s);return(d.getMonth()+1)+'/'+(d.getDate());};
@@ -1579,7 +1579,7 @@ function renderForecast(){
   const active=deals.filter(d=>ACTIVE.has(d.s));
   const pipe=active.reduce((s,d)=>s+(d.a||0),0);
   const weighted=active.reduce((s,d)=>s+(d.a||0)*prob(d),0);
-  const now=new Date("2026-05-31"),endMay=new Date("2026-05-31"),end30=new Date("2026-06-08");
+  const now=new Date("2026-06-01"),endMay=new Date("2026-06-01"),end30=new Date("2026-06-08");
   const closingMay=deals.filter(d=>{if(!d.c)return false;const dd=new Date(d.c);return dd>=now&&dd<=endMay;});
   const closing30=deals.filter(d=>{if(!d.c)return false;const dd=new Date(d.c);return dd>=now&&dd<=end30;});
   document.getElementById('forecast-kpis').innerHTML=`
@@ -1743,6 +1743,7 @@ function renderFutureProspect() {
 }
 
 const FACTORS_DATA=[
+{date:"Jun 1",company:"CarLux Fort Myers",domain:"drivecarlux.com",owner:"Jace Larsen",deal:"CarLux Fort Myers - Studio",page:"console.spyne.ai/organization",factors_url:"https://app.factors.ai/profiles/accounts/ZG9tLU1pMWtjbWwyWldOaGNteDFlQzVqYjIwPQ==?group=$domains&view=birdview",pod_member:"Jace Larsen"},
 {date:"May 30",company:"Central Chevrolet",domain:"centralchevyauto.com",owner:"Anmol Sehgal",deal:"Central Auto Inc.",page:"www.spyne.ai/conversational-ai",factors_url:"https://app.factors.ai/profiles/accounts/ZG9tLU1pMWpaVzUwY21Gc1kyaGxkbmxoZFhSdkxtTnZiUT09?group=$domains&view=birdview",pod_member:"Anmol Sehgal"},
 {date:"May 29",company:"Bramgate Automotive",domain:"bramgateautomotive.com",owner:"Vaibhav Kumar",deal:"",page:"www.spyne.ai/blogs/chatgpt-for-the-automotive-industry",factors_url:"https://app.factors.ai/profiles/accounts/ZG9tLU1pMWljbUF0WjJGMFpXRjFkRzl0YjNScGRtVXVZMjl0?group=$domains&view=birdview",pod_member:"Archit Gupta"},
 {date:"May 29",company:"Baril Ford",domain:"barilford.com",owner:"Vaibhav Kumar",deal:"",page:"www.spyne.ai/fr/tools/trailer-vin-decoder",factors_url:"https://app.factors.ai/profiles/accounts/ZG9tLU1pMWliWVJwYkdadmNtUXVZMjl0?group=$domains&view=birdview",pod_member:"Archit Gupta"},
