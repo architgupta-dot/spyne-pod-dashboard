@@ -1882,7 +1882,8 @@ function renderInboundLeads() {
 function renderFactors() {
   const q = (document.getElementById('factors-search')?.value||'').toLowerCase();
   let alerts = [...FACTORS_DATA].sort((a,b)=>{
-    const dm = s => { const m=s.date.match(/May (\d+)/); return m?parseInt(m[1]):0; };
+    const MO={Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12};
+    const dm=s=>{const mx=(s.date||'').match(/([A-Za-z]+)\s*(\d+)/);return mx?(MO[mx[1]]||0)*100+parseInt(mx[2]):0;};
     return dm(b)-dm(a);
   });
 
