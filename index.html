@@ -1913,7 +1913,14 @@ function renderFactors() {
 
   if(activeFilter !== 'all') {
     const ownerName = (OWNERS[activeFilter]||'').toLowerCase();
-    alerts = alerts.filter(a => (a.pod_member||a.owner||'').toLowerCase().includes(ownerName));
+    alerts = alerts.filter(a => {
+      const pm = (a.pod_member||a.owner||'').toLowerCase();
+      // Match by name string OR by checking ownerMatch via ID lookup
+      if(pm.includes(ownerName)) return true;
+      // Also check first name only (e.g. "Archit" matches "Archit Gupta")
+      const firstName = ownerName.split(' ')[0];
+      return pm.includes(firstName) && firstName.length > 3;
+    });
   }
   if(q) alerts = alerts.filter(a => (a.company||'').toLowerCase().includes(q) || (a.domain||'').toLowerCase().includes(q) || (a.owner||'').toLowerCase().includes(q));
 
